@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title></title>
+</head>
+<body>
+	<script src="../node_modules/tweakpane/dist/tweakpane.js"></script>
+	<script src="../dist/tweakpane-plugin-template.js"></script>
+	<script>
+		const params = {
+			prop: 3,
+		};
+		const pane = new Tweakpane.Pane();
+
+		// Register plugin
+		pane.registerPlugin(TweakpaneTemplatePlugin);
+
+		// TODO: Update parameters for your plugin
+		pane.addInput(params, 'prop', {
+			view: 'dots',
+		}).on('change', (ev) => {
+			console.log(ev.value);
+		});
+
+		window.pane = pane;
+	</script>
+</body>
+</html>

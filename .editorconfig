@@ -1,0 +1,25 @@
+root = true
+
+[*.{html}]
+indent_size = 2
+indent_style = tab
+
+[*.{js,json,ts}]
+indent_size = 2
+indent_style = tab
+
+[*.md]
+indent_size = 2
+indent_style = space
+
+[*.scss]
+indent_size = 2
+indent_style = tab
+
+[*.yml]
+indent_size = 2
+indent_style = space
+
+[package.json]
+indent_size = 2
+indent_style = space
