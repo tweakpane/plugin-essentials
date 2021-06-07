@@ -1,0 +1,20 @@
+.#{$prefix}-btngridv {
+	border-radius: var(--elm-br);
+	display: grid;
+	overflow: hidden;
+	gap: 2px;
+
+	&.#{$prefix}-v-disabled {
+		opacity: 0.5;
+	}
+
+	& .#{$prefix}-btnv_b:disabled {
+		opacity: 1;
+	}
+	& .#{$prefix}-btnv_b:disabled .#{$prefix}-btnv_t {
+		opacity: 0.5;
+	}
+	& .#{$prefix}-btnv_b {
+		border-radius: 0;
+	}
+}

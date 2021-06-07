@@ -1,4 +1,9 @@
-import {TemplateInputPlugin} from './plugin';
+import {ButtonGridBladePlugin} from './button-grid/plugin';
+import {FpsGraphBladePlugin} from './fps-graph/plugin';
+import {RadioGridBladePlugin} from './radio-grid/blade-plugin';
 
-// Export your plugin as constant `plugin`
-export const plugin = TemplateInputPlugin;
+export const plugins = [
+	ButtonGridBladePlugin,
+	FpsGraphBladePlugin,
+	RadioGridBladePlugin,
+];

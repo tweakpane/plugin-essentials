@@ -6,7 +6,7 @@
 </head>
 <body>
 	<script src="../node_modules/tweakpane/dist/tweakpane.js"></script>
-	<script src="../dist/tweakpane-plugin-template.js"></script>
+	<script src="../dist/tweakpane-plugin-essentials.js"></script>
 	<script>
 		const params = {
 			prop: 3,
@@ -14,13 +14,51 @@
 		const pane = new Tweakpane.Pane();
 
 		// Register plugin
-		pane.registerPlugin(TweakpaneTemplatePlugin);
+		pane.registerPlugin(TweakpaneEssentialsPlugin);
 
-		// TODO: Update parameters for your plugin
-		pane.addInput(params, 'prop', {
-			view: 'dots',
+		const fpsGraph = pane.addBlade({
+			view: 'fpsgraph',
+			label: 'fpsgraph',
+			lineCount: 2,
+		});
+		function render() {
+			fpsGraph.begin();
+
+			// Rendering
+
+			fpsGraph.end();
+			requestAnimationFrame(render);
+		}
+		render();
+
+		pane.addBlade({
+			view: 'buttongrid',
+			size: [3, 3],
+			cells: (x, y) => ({
+				title: [
+					['NW', 'N', 'NE'],
+					['W',  '*', 'E'],
+					['SW', 'S', 'SE'],
+				][y][x],
+			}),
+			label: 'buttongrid',
+		}).on('click', (ev) => {
+			console.log(ev);
+		});
+
+		const scales = [10, 20, 25, 50, 75, 100];
+		pane.addBlade({
+			view: 'radiogrid',
+			groupName: 'scale',
+			size: [3, 2],
+			cells: (x, y) => ({
+				title: `${scales[y * 3 + x]}%`,
+				value: scales[y * 3 + x],
+			}),
+			value: 20,
+			label: 'radiogrid',
 		}).on('change', (ev) => {
-			console.log(ev.value);
+			console.log(ev);
 		});
 
 		window.pane = pane;

@@ -1,0 +1,14 @@
+.#{$prefix}-radgridv {
+	border-radius: var(--elm-br);
+	display: grid;
+	overflow: hidden;
+	gap: 2px;
+
+	&.#{$prefix}-v-disabled {
+		opacity: 0.5;
+	}
+
+	& .#{$prefix}-radv_b {
+		border-radius: 0;
+	}
+}
