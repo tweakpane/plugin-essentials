@@ -1,11 +1,9 @@
 import {
 	BaseInputParams,
 	InputBindingPlugin,
-	ListParamsOptions,
 	numberFromUnknown,
 	ParamsParser,
 	ParamsParsers,
-	parseListOptions,
 	parseParams,
 	writePrimitive,
 } from '@tweakpane/core';
@@ -49,7 +47,6 @@ export const RadioGridNumberInputPlugin: InputBindingPlugin<
 				}
 			>,
 			groupName: p.required.string,
-			options: p.required.custom<ListParamsOptions<number>>(parseListOptions),
 			size: p.required.array(p.required.number) as ParamsParser<
 				[number, number]
 			>,

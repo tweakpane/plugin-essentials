@@ -9,14 +9,45 @@
 	<script src="../dist/tweakpane-plugin-essentials.js"></script>
 	<script>
 		const params = {
-			prop: 3,
+			interval: {min: 16, max: 48},
+			radiogrid: 25,
 		};
 		const pane = new Tweakpane.Pane();
 
 		// Register plugin
 		pane.registerPlugin(TweakpaneEssentialsPlugin);
 
-		const fpsGraph = pane.addBlade({
+		// Inputs
+		const fi = pane.addFolder({
+			title: 'Inputs',
+		});
+
+		fi.addInput(params, 'interval', {
+			min: 0,
+			max: 100,
+			step: 1,
+		});
+
+		const scales = [10, 20, 25, 50, 75, 100];
+		fi.addInput(params, 'radiogrid', {
+			view: 'radiogrid',
+			groupName: 'scale',
+			size: [3, 2],
+			cells: (x, y) => ({
+				title: `${scales[y * 3 + x]}%`,
+				value: scales[y * 3 + x],
+			}),
+			label: 'radiogrid',
+		}).on('change', (ev) => {
+			console.log(ev);
+		});
+
+		// Monitors
+		const fm = pane.addFolder({
+			title: 'Monitors',
+		});
+
+		const fpsGraph = fm.addBlade({
 			view: 'fpsgraph',
 			label: 'fpsgraph',
 			lineCount: 2,
@@ -31,7 +62,12 @@
 		}
 		render();
 
-		pane.addBlade({
+		// Blades
+		const fb = pane.addFolder({
+			title: 'Blades',
+		});
+
+		fb.addBlade({
 			view: 'buttongrid',
 			size: [3, 3],
 			cells: (x, y) => ({
@@ -43,21 +79,6 @@
 			}),
 			label: 'buttongrid',
 		}).on('click', (ev) => {
-			console.log(ev);
-		});
-
-		const scales = [10, 20, 25, 50, 75, 100];
-		pane.addBlade({
-			view: 'radiogrid',
-			groupName: 'scale',
-			size: [3, 2],
-			cells: (x, y) => ({
-				title: `${scales[y * 3 + x]}%`,
-				value: scales[y * 3 + x],
-			}),
-			value: 20,
-			label: 'radiogrid',
-		}).on('change', (ev) => {
 			console.log(ev);
 		});
 
