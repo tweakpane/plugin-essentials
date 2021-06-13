@@ -3,6 +3,7 @@
   "version": "0.0.0",
   "description": "Essential components for Tweakpane",
   "main": "dist/tweakpane-plugin-essentials.js",
+  "types": "dist/types/index.d.ts",
   "author": "cocopon",
   "license": "MIT",
   "files": [
@@ -19,6 +20,7 @@
     "clean": "rm -rf dist *.tgz *.zip",
     "build": "run-p build:*",
     "build:dev": "rollup --config rollup.config.js",
+    "build:dts": "tsc --project src/tsconfig-dts.json",
     "build:prod": "rollup --config rollup.config.js --environment BUILD:production",
     "format": "run-p format:*",
     "format:scss": "prettier --parser scss --write 'src/sass/**/*.scss'",
