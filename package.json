@@ -10,7 +10,7 @@
     "dist"
   ],
   "scripts": {
-    "prepare": "run-s clean build",
+    "prepack": "run-s clean build",
     "prepublishOnly": "npm test",
     "start": "npm run watch",
     "test": "eslint --ext .ts 'src/**/*.ts'",
