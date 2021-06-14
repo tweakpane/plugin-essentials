@@ -8,17 +8,17 @@
 			margin: 0;
 		}
 		.wrapper {
+			align-items: start;
 			background-color: #f1f2f3;
 			box-sizing: border-box;
+			display: grid;
+			gap: 32px;
+			grid-template-columns: repeat(auto-fit, 256px);
+			justify-content: center;
 			margin-left: auto;
 			margin-right: auto;
 			max-width: 1024px;
 			padding: 64px;
-		}
-		.wrapper > .tp-rotv {
-			margin-left: auto;
-			margin-right: auto;
-			width: 256px;
 		}
 	</style>
 </head>
@@ -32,26 +32,30 @@
 			interval: {min: 16, max: 48},
 			radiogrid: 25,
 		};
-		const pane = new Tweakpane.Pane({
-			container: document.querySelector('.wrapper'),
-		});
+		const panes = [
+			'Input bindings',
+			'Blades',
+		].map((title) => {
+			const pane = new Tweakpane.Pane({
+				container: document.querySelector('.wrapper'),
+				title: title,
+			});
 
-		// Register plugin
-		pane.registerPlugin(TweakpaneEssentialsPlugin);
+			// Register plugin
+			pane.registerPlugin(TweakpaneEssentialsPlugin);
+
+			return pane;
+		});
 
 		// Input bindings
-		const fi = pane.addFolder({
-			title: 'Input bindings',
-		});
-
-		fi.addInput(params, 'interval', {
+		panes[0].addInput(params, 'interval', {
 			min: 0,
 			max: 100,
 			step: 1,
 		});
 
 		const scales = [10, 20, 25, 50, 75, 100];
-		fi.addInput(params, 'radiogrid', {
+		panes[0].addInput(params, 'radiogrid', {
 			view: 'radiogrid',
 			groupName: 'scale',
 			size: [3, 2],
@@ -65,11 +69,7 @@
 		});
 
 		// Blades
-		const fb = pane.addFolder({
-			title: 'Blades',
-		});
-
-		const fpsGraph = fb.addBlade({
+		const fpsGraph = panes[1].addBlade({
 			view: 'fpsgraph',
 
 			label: 'fpsgraph',
@@ -85,7 +85,16 @@
 		}
 		render();
 
-		fb.addBlade({
+		panes[1].addBlade({
+			view: 'cubicbezier',
+			value: [0.5, 0, 0.5, 1],
+
+			expanded: true,
+			label: 'cubic\nbezier',
+			picker: 'inline',
+		});
+
+		panes[1].addBlade({
 			view: 'buttongrid',
 			size: [3, 3],
 			cells: (x, y) => ({
@@ -95,12 +104,12 @@
 					['SW', 'S', 'SE'],
 				][y][x],
 			}),
-			label: 'buttongrid',
+			label: 'button\ngrid',
 		}).on('click', (ev) => {
 			console.log(ev);
 		});
 
-		window.pane = pane;
+		window.panes = panes;
 	</script>
 </body>
 </html>

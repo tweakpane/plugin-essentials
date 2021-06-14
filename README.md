@@ -106,4 +106,19 @@ pane.addBlade({
 ```
 
 
+### Cubic bezier
+```js
+pane.addBlade({
+  view: 'cubicbezier',
+  value: [0.5, 0, 0.5, 1],
+
+  expanded: true,
+  label: 'cubicbezier',
+  picker: 'inline',
+}).on('click', (ev) => {
+  console.log(ev);
+});
+```
+
+
 [tweakpane]: https://github.com/cocopon/tweakpane/

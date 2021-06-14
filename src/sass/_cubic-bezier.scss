@@ -1,0 +1,168 @@
+.#{$prefix}-cbzv {
+	position: relative;
+
+	// Head
+	&_h {
+		display: flex;
+	}
+	// Button
+	&_b {
+		@extend %button;
+
+		margin-right: 4px;
+		position: relative;
+		width: var(--bld-us);
+
+		svg {
+			display: block;
+			height: 16px;
+			left: 50%;
+			margin-left: -(16px / 2);
+			margin-top: -(16px / 2);
+			position: absolute;
+			top: 50%;
+			width: 16px;
+
+			path {
+				stroke: var(--bs-bg);
+				stroke-width: 2;
+			}
+		}
+	}
+	// Text
+	&_t {
+		flex: 1;
+	}
+	// Inline picker
+	&_p {
+		height: 0;
+		margin-top: 0;
+		opacity: 0;
+		overflow: hidden;
+		transition: height $fold-transition-duration ease-in-out,
+			opacity $fold-transition-duration linear,
+			margin $fold-transition-duration ease-in-out;
+	}
+	&#{&}-expanded &_p {
+		margin-top: var(--bld-s);
+		opacity: 1;
+	}
+	&#{&}-cpl &_p {
+		overflow: visible;
+	}
+
+	// Popup
+	.#{$prefix}-popv {
+		left: calc(-1 * var(--cnt-h-p));
+		position: absolute;
+		right: calc(-1 * var(--cnt-h-p));
+		top: var(--bld-us);
+	}
+}
+
+// Picker
+.#{$prefix}-cbzpv {
+	&_t {
+		margin-top: var(--bld-s);
+	}
+}
+
+// Graph
+.#{$prefix}-cbzgv {
+	@extend %input;
+
+	height: auto;
+	overflow: hidden;
+	position: relative;
+
+	&.#{$prefix}-v-disabled {
+		opacity: 0.5;
+	}
+
+	// Preview container
+	&_p {
+		left: 16px;
+		position: absolute;
+		right: 16px;
+		top: 0;
+	}
+	// Graph
+	&_g {
+		cursor: pointer;
+		display: block;
+		height: calc(var(--bld-us) * 5);
+		width: 100%;
+	}
+	// Guide
+	&_u {
+		opacity: 0.1;
+		stroke: var(--in-fg);
+		stroke-dasharray: 1;
+	}
+	// Curve
+	&_l {
+		fill: transparent;
+		stroke: var(--in-fg);
+	}
+	// Vectors
+	&_v {
+		opacity: 0.5;
+		stroke: var(--in-fg);
+		stroke-dasharray: 1;
+	}
+	// Handles
+	&_h {
+		border: var(--in-fg) solid 1px;
+		border-radius: 50%;
+		box-sizing: border-box;
+		height: 4px;
+		margin-left: -2px;
+		margin-top: -2px;
+		pointer-events: none;
+		position: absolute;
+		width: 4px;
+	}
+
+	&:focus &_h-sel {
+		background-color: var(--in-fg);
+		border-width: 0;
+	}
+}
+
+// Preview
+.#{$prefix}-cbzprvv {
+	cursor: pointer;
+	height: 4px;
+	padding: 4px 0;
+	position: relative;
+
+	// Graphics
+	&_g {
+		display: block;
+		height: 100%;
+		overflow: visible;
+		width: 100%;
+	}
+	// Ticks
+	&_t {
+		opacity: 0.5;
+		stroke: var(--mo-fg);
+	}
+	// Marker
+	&_m {
+		background-color: var(--mo-fg);
+		border-radius: 50%;
+		height: 4px;
+		margin-left: -2px;
+		margin-top: -2px;
+		opacity: 0;
+		position: absolute;
+		top: 50%;
+		transition: opacity 0.2s ease-out;
+		width: 4px;
+
+		&#{&}-a {
+			opacity: 1;
+		}
+	}
+}
