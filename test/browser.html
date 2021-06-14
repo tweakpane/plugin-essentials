@@ -39,9 +39,9 @@
 		// Register plugin
 		pane.registerPlugin(TweakpaneEssentialsPlugin);
 
-		// Inputs
+		// Input bindings
 		const fi = pane.addFolder({
-			title: 'Inputs',
+			title: 'Input bindings',
 		});
 
 		fi.addInput(params, 'interval', {
@@ -64,13 +64,14 @@
 			console.log(ev);
 		});
 
-		// Monitors
-		const fm = pane.addFolder({
-			title: 'Monitors',
+		// Blades
+		const fb = pane.addFolder({
+			title: 'Blades',
 		});
 
-		const fpsGraph = fm.addBlade({
+		const fpsGraph = fb.addBlade({
 			view: 'fpsgraph',
+
 			label: 'fpsgraph',
 			lineCount: 2,
 		});
@@ -83,11 +84,6 @@
 			requestAnimationFrame(render);
 		}
 		render();
-
-		// Blades
-		const fb = pane.addFolder({
-			title: 'Blades',
-		});
 
 		fb.addBlade({
 			view: 'buttongrid',
