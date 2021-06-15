@@ -32,6 +32,8 @@ pane.registerPlugin(EssentialsPlugin);
 
 
 ### Interval
+![interval](https://user-images.githubusercontent.com/602961/122065260-c261bc00-ce2c-11eb-914b-81dde7957c43.png)
+
 ```js
 const params = {
   range: {min: 16, max: 48},
@@ -47,6 +49,8 @@ pane.addInput(params, 'range', {
 
 
 ### FPS graph
+![fpsgraph](https://user-images.githubusercontent.com/602961/122065296-c988ca00-ce2c-11eb-9907-65e62ea934cd.png)
+
 ```js
 const fpsGraph = pane.addBlade({
   view: 'fpsgraph',
@@ -67,6 +71,8 @@ function render() {
 
 
 ### Radio grid
+![radiogrid](https://user-images.githubusercontent.com/602961/122065318-ce4d7e00-ce2c-11eb-8f04-e05760e118d9.png)
+
 ```js
 const params = {
   scale: 25,
@@ -90,6 +96,8 @@ pane.addInput(params, 'scale', {
 
 
 ### Button grid
+![buttongrid](https://user-images.githubusercontent.com/602961/122065349-d5748c00-ce2c-11eb-8538-c2a0ae6aaab4.png)
+
 ```js
 pane.addBlade({
   view: 'buttongrid',
@@ -109,6 +117,8 @@ pane.addBlade({
 
 
 ### Cubic bezier
+![cubicbezier](https://user-images.githubusercontent.com/602961/122065367-d9a0a980-ce2c-11eb-8f20-f93876a21ce2.png)
+
 ```js
 pane.addBlade({
   view: 'cubicbezier',
