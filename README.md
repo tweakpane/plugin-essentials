@@ -21,7 +21,7 @@ Essential components for [Tweakpane][tweakpane].
 ### Package
 ```js
 import {Pane} from 'tweakpane';
-import * as EssentialsPlugin from 'tweakpane-plugin-essentials';
+import * as EssentialsPlugin from '@tweakpane/plugin-essentials';
 
 const pane = new Pane();
 pane.registerPlugin(EssentialsPlugin);
