@@ -17,6 +17,7 @@
 			justify-content: center;
 			margin-left: auto;
 			margin-right: auto;
+			margin-top: 32px;
 			max-width: 1024px;
 			padding: 64px;
 		}
@@ -110,6 +111,22 @@
 		});
 
 		window.panes = panes;
+
+		if (location.search === '?readme') {
+			panes.forEach((pane) => {
+				pane.children.forEach((child) => {
+					const wrapperElem = document.createElement('div');
+					wrapperElem.classList.add('wrapper');
+					document.body.appendChild(wrapperElem);
+
+					const newPane = new Tweakpane.Pane({
+						container: wrapperElem,
+					});
+					newPane.registerPlugin(TweakpaneEssentialsPlugin);
+					newPane.add(child);
+				});
+			});
+		}
 	</script>
 </body>
 </html>
