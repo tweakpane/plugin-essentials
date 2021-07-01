@@ -16,7 +16,7 @@
     "test": "eslint --ext .ts 'src/**/*.ts'",
     "assets": "run-s clean build assets:version assets:zip",
     "assets:version": "node scripts/assets-append-version.js",
-    "assets:zip": "zip -x '*types*' -j -r $(cat package.json | npx json name)-$(cat package.json | npx json version).zip dist",
+    "assets:zip": "zip -x '*types*' -j -r $(node scripts/dist-name.js)-$(cat package.json | npx json version).zip dist",
     "clean": "rimraf dist *.tgz *.zip",
     "build": "run-p build:*",
     "build:dev": "rollup --config rollup.config.js",
