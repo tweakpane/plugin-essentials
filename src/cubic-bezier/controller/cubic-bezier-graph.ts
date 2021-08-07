@@ -7,6 +7,7 @@ import {
 	PointerHandler,
 	PointerHandlerEvent,
 	Value,
+	ValueChangeOptions,
 	ValueController,
 	ViewProps,
 } from '@tweakpane/core';
@@ -54,8 +55,10 @@ export class CubicBezierGraphController
 
 	constructor(doc: Document, config: Config) {
 		this.onKeyDown_ = this.onKeyDown_.bind(this);
+		this.onKeyUp_ = this.onKeyUp_.bind(this);
 		this.onPointerDown_ = this.onPointerDown_.bind(this);
 		this.onPointerMove_ = this.onPointerMove_.bind(this);
+		this.onPointerUp_ = this.onPointerUp_.bind(this);
 
 		this.baseStep_ = config.baseStep;
 		this.value = config.value;
@@ -68,6 +71,7 @@ export class CubicBezierGraphController
 			viewProps: this.viewProps,
 		});
 		this.view.element.addEventListener('keydown', this.onKeyDown_);
+		this.view.element.addEventListener('keyup', this.onKeyUp_);
 
 		this.prevView_ = new CubicBezierPreviewView(doc, {
 			value: this.value,
@@ -83,6 +87,7 @@ export class CubicBezierGraphController
 		const ptHandler = new PointerHandler(this.view.element);
 		ptHandler.emitter.on('down', this.onPointerDown_);
 		ptHandler.emitter.on('move', this.onPointerMove_);
+		ptHandler.emitter.on('up', this.onPointerUp_);
 	}
 
 	public refresh(): void {
@@ -95,6 +100,7 @@ export class CubicBezierGraphController
 	private updateValue_(
 		point: {x: number; y: number},
 		locksAngle: boolean,
+		opts: ValueChangeOptions,
 	): void {
 		const index = this.sel_.rawValue;
 		const comps = this.value.rawValue.toObject();
@@ -102,7 +108,7 @@ export class CubicBezierGraphController
 		const v = locksAngle ? lockAngle(index, index, vp.x, vp.y) : vp;
 		comps[index * 2] = v.x;
 		comps[index * 2 + 1] = v.y;
-		this.value.rawValue = new CubicBezier(...comps);
+		this.value.setRawValue(new CubicBezier(...comps), opts);
 	}
 
 	private onPointerDown_(ev: PointerHandlerEvent): void {
@@ -117,7 +123,10 @@ export class CubicBezierGraphController
 		const p2 = this.view.valueToPosition(bezier.x2, bezier.y2);
 		const d2 = getDistance(data.point.x, data.point.y, p2.x, p2.y);
 		this.sel_.rawValue = d1 <= d2 ? 0 : 1;
-		this.updateValue_(data.point, ev.shiftKey);
+		this.updateValue_(data.point, ev.shiftKey, {
+			forceEmit: false,
+			last: false,
+		});
 	}
 
 	private onPointerMove_(ev: PointerHandlerEvent): void {
@@ -125,8 +134,21 @@ export class CubicBezierGraphController
 		if (!data.point) {
 			return;
 		}
+		this.updateValue_(data.point, ev.shiftKey, {
+			forceEmit: false,
+			last: false,
+		});
+	}
 
-		this.updateValue_(data.point, ev.shiftKey);
+	private onPointerUp_(ev: PointerHandlerEvent): void {
+		const data = ev.data;
+		if (!data.point) {
+			return;
+		}
+		this.updateValue_(data.point, ev.shiftKey, {
+			forceEmit: true,
+			last: true,
+		});
 	}
 
 	private onKeyDown_(ev: KeyboardEvent): void {
@@ -144,6 +166,26 @@ export class CubicBezierGraphController
 			this.baseStep_,
 			getVerticalStepKeys(ev),
 		);
-		this.value.rawValue = new CubicBezier(...comps);
+		this.value.setRawValue(new CubicBezier(...comps), {
+			forceEmit: false,
+			last: false,
+		});
+	}
+
+	private onKeyUp_(ev: KeyboardEvent): void {
+		if (isArrowKey(ev.key)) {
+			ev.preventDefault();
+		}
+
+		const xStep = getStepForKey(this.baseStep_, getHorizontalStepKeys(ev));
+		const yStep = getStepForKey(this.baseStep_, getVerticalStepKeys(ev));
+		if (xStep === 0 && yStep === 0) {
+			return;
+		}
+
+		this.value.setRawValue(this.value.rawValue, {
+			forceEmit: true,
+			last: true,
+		});
 	}
 }

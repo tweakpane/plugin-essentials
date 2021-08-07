@@ -4,6 +4,7 @@ import {
 	PointerHandler,
 	PointerHandlerEvent,
 	Value,
+	ValueChangeOptions,
 	ValueController,
 	ViewProps,
 } from '@tweakpane/core';
@@ -105,16 +106,19 @@ export class RangeSliderController
 		}
 	}
 
-	private onPointerMove_(ev: PointerHandlerEvent) {
-		const v = this.valueFromData_(ev.data);
+	private applyPointToValue_(
+		data: PointerData,
+		opts: ValueChangeOptions,
+	): void {
+		const v = this.valueFromData_(data);
 		if (v === null) {
 			return;
 		}
 
 		if (this.grabbing_ === 'min') {
-			this.value.rawValue = new Interval(v, this.value.rawValue.max);
+			this.value.setRawValue(new Interval(v, this.value.rawValue.max), opts);
 		} else if (this.grabbing_ === 'max') {
-			this.value.rawValue = new Interval(this.value.rawValue.min, v);
+			this.value.setRawValue(new Interval(this.value.rawValue.min, v), opts);
 		} else if (this.grabbing_ === 'length') {
 			const len = this.value.rawValue.length;
 			let min = v - this.grabOffset_;
@@ -126,11 +130,22 @@ export class RangeSliderController
 				min = this.maxValue_ - len;
 				max = this.maxValue_;
 			}
-			this.value.rawValue = new Interval(min, max);
+			this.value.setRawValue(new Interval(min, max), opts);
 		}
 	}
 
-	private onPointerUp_(_ev: PointerHandlerEvent) {
+	private onPointerMove_(ev: PointerHandlerEvent) {
+		this.applyPointToValue_(ev.data, {
+			forceEmit: false,
+			last: false,
+		});
+	}
+
+	private onPointerUp_(ev: PointerHandlerEvent) {
+		this.applyPointToValue_(ev.data, {
+			forceEmit: true,
+			last: true,
+		});
 		this.grabbing_ = null;
 	}
 }

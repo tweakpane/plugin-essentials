@@ -53,6 +53,8 @@
 			min: 0,
 			max: 100,
 			step: 1,
+		}).on('change', (ev) => {
+			console.log(ev);
 		});
 
 		const scales = [10, 20, 25, 50, 75, 100];
