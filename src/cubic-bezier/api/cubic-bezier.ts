@@ -1,7 +1,13 @@
-import {BladeApi, LabeledValueController} from '@tweakpane/core';
+import {BladeApi, LabeledValueController, TpChangeEvent} from '@tweakpane/core';
 
 import {CubicBezierController} from '../controller/cubic-bezier';
 import {CubicBezier} from '../model/cubic-bezier';
+
+export interface CubicBezierApiEvents {
+	change: {
+		event: TpChangeEvent<CubicBezier>;
+	};
+}
 
 export class CubicBezierApi extends BladeApi<
 	LabeledValueController<CubicBezier, CubicBezierController>
@@ -16,5 +22,16 @@ export class CubicBezierApi extends BladeApi<
 
 	get value(): CubicBezier {
 		return this.controller_.valueController.value.rawValue;
+	}
+
+	public on<EventName extends keyof CubicBezierApiEvents>(
+		eventName: EventName,
+		handler: (ev: CubicBezierApiEvents[EventName]['event']) => void,
+	): this {
+		const bh = handler.bind(this);
+		this.controller_.valueController.value.emitter.on(eventName, (ev) => {
+			bh(new TpChangeEvent(this, ev.rawValue, undefined, ev.options.last));
+		});
+		return this;
 	}
 }
