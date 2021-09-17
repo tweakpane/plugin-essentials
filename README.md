@@ -127,7 +127,7 @@ pane.addBlade({
   expanded: true,
   label: 'cubicbezier',
   picker: 'inline',
-}).on('click', (ev) => {
+}).on('change', (ev) => {
   console.log(ev);
 });
 ```
