@@ -24,6 +24,10 @@ export class CubicBezierApi extends BladeApi<
 		return this.controller_.valueController.value.rawValue;
 	}
 
+	set value(value: CubicBezier) {
+		this.controller_.valueController.value.rawValue = value;
+	}
+
 	public on<EventName extends keyof CubicBezierApiEvents>(
 		eventName: EventName,
 		handler: (ev: CubicBezierApiEvents[EventName]['event']) => void,
