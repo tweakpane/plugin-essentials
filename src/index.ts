@@ -7,6 +7,8 @@ import {IntervalInputPlugin} from './interval/plugin';
 import {RadioGridBladePlugin} from './radio-grid/blade-plugin';
 import {RadioGridNumberInputPlugin} from './radio-grid/input-plugin';
 
+export {CubicBezier} from './cubic-bezier/model/cubic-bezier';
+
 export const plugins: TpPlugin[] = [
 	ButtonGridBladePlugin,
 	CubicBezierBladePlugin,
