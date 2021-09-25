@@ -30,6 +30,7 @@
 	<script src="../dist/tweakpane-plugin-essentials.js"></script>
 	<script>
 		const params = {
+			bezier: [0.4, 0.2, 0.5, 1],
 			interval: {min: 16, max: 48},
 			radiogrid: 25,
 		};
@@ -71,6 +72,16 @@
 			console.log(ev);
 		});
 
+		panes[0].addInput(params, 'bezier', {
+			view: 'cubicbezier',
+
+			expanded: true,
+			label: 'cubic\nbezier',
+			picker: 'inline',
+		}).on('change', (ev) => {
+			console.log(ev);
+		});
+
 		// Blades
 		const fpsGraph = panes[1].addBlade({
 			view: 'fpsgraph',
@@ -92,9 +103,7 @@
 			view: 'cubicbezier',
 			value: [0.5, 0, 0.5, 1],
 
-			expanded: true,
 			label: 'cubic\nbezier',
-			picker: 'inline',
 		}).on('change', (ev) => {
 			console.log(ev);
 		});

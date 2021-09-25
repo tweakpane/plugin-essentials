@@ -1,21 +1,19 @@
 import {
 	BladePlugin,
-	Constraint,
 	createNumberFormatter,
 	createValue,
 	LabeledValueController,
 	ParamsParsers,
 	parseParams,
 	PickerLayout,
-	PointNdConstraint,
-	RangeConstraint,
 	ValueMap,
 } from '@tweakpane/core';
 import {BaseBladeParams} from 'tweakpane';
 
 import {CubicBezierApi} from './api/cubic-bezier';
 import {CubicBezierController} from './controller/cubic-bezier';
-import {CubicBezier, CubicBezierAssembly} from './model/cubic-bezier';
+import {CubicBezier} from './model/cubic-bezier';
+import {createConstraint} from './util';
 
 export interface CubicBezierBladeParams extends BaseBladeParams {
 	value: [number, number, number, number];
@@ -24,20 +22,6 @@ export interface CubicBezierBladeParams extends BaseBladeParams {
 	expanded?: boolean;
 	label?: string;
 	picker?: PickerLayout;
-}
-
-function createConstraint(): Constraint<CubicBezier> {
-	return new PointNdConstraint<CubicBezier>({
-		assembly: CubicBezierAssembly,
-		components: [0, 1, 2, 3].map((index) =>
-			index % 2 === 0
-				? new RangeConstraint({
-						min: 0,
-						max: 1,
-				  })
-				: undefined,
-		),
-	});
 }
 
 export const CubicBezierBladePlugin: BladePlugin<CubicBezierBladeParams> = {

@@ -68,6 +68,10 @@ export class CubicBezier {
 		);
 	}
 
+	public static fromObject(obj: CubicBezierObject): CubicBezier {
+		return new CubicBezier(...obj);
+	}
+
 	public static equals(v1: CubicBezier, v2: CubicBezier): boolean {
 		return (
 			v1.x1 === v2.x1 && v1.y1 === v2.y1 && v1.x2 === v2.x2 && v1.y2 === v2.y2
