@@ -50,9 +50,9 @@
 
 		// Input bindings
 		panes[0].addInput(params, 'interval', {
+			format: (v) => v.toFixed(1),
 			min: 0,
 			max: 100,
-			step: 1,
 		}).on('change', (ev) => {
 			console.log(ev);
 		});
