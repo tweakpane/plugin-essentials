@@ -6,10 +6,12 @@ import {
 	createRangeConstraint,
 	createStepConstraint,
 	findConstraint,
+	Formatter,
 	getBaseStep,
 	getSuitableDecimalDigits,
 	getSuitableDraggingScale,
 	InputBindingPlugin,
+	ParamsParser,
 	ParamsParsers,
 	parseNumber,
 	parseParams,
@@ -25,6 +27,7 @@ import {intervalFromUnknown, writeInterval} from './converter/interval';
 import {Interval, IntervalAssembly, IntervalObject} from './model/interval';
 
 interface IntervalInputParams extends BaseInputParams {
+	format?: Formatter<number>;
 	max?: number;
 	min?: number;
 	step?: number;
@@ -60,6 +63,7 @@ export const IntervalInputPlugin: InputBindingPlugin<
 
 		const p = ParamsParsers;
 		const result = parseParams<IntervalInputParams>(params, {
+			format: p.optional.function as ParamsParser<Formatter<number>>,
 			max: p.optional.number,
 			min: p.optional.number,
 			step: p.optional.number,
@@ -85,15 +89,17 @@ export const IntervalInputPlugin: InputBindingPlugin<
 		}
 
 		const midValue = (v.rawValue.min + v.rawValue.max) / 2;
+		const formatter =
+			args.params.format ??
+			createNumberFormatter(getSuitableDecimalDigits(c.edge, midValue));
+
 		const rc = c.edge && findConstraint(c.edge, RangeConstraint);
 		if (rc?.minValue !== undefined && rc?.maxValue !== undefined) {
 			return new RangeSliderTextController(args.document, {
 				baseStep: getBaseStep(c.edge),
 				constraint: c.edge,
 				draggingScale: getSuitableDraggingScale(rc, midValue),
-				formatter: createNumberFormatter(
-					getSuitableDecimalDigits(c.edge, midValue),
-				),
+				formatter: formatter,
 				maxValue: rc.maxValue,
 				minValue: rc.minValue,
 				parser: parseNumber,
@@ -107,9 +113,7 @@ export const IntervalInputPlugin: InputBindingPlugin<
 			constraint: c.edge,
 			textProps: ValueMap.fromObject({
 				draggingScale: midValue,
-				formatter: createNumberFormatter(
-					getSuitableDecimalDigits(c.edge, midValue),
-				),
+				formatter: formatter,
 			}),
 		};
 		return new PointNdTextController(args.document, {
