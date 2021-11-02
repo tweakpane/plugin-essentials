@@ -94,8 +94,8 @@ export class RangeSliderController
 				p - pmin,
 				0,
 				1,
-				this.minValue_,
-				this.maxValue_,
+				0,
+				this.maxValue_ - this.minValue_,
 			);
 		} else if (p < pmin) {
 			this.grabbing_ = 'min';
