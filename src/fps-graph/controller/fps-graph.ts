@@ -5,6 +5,7 @@ import {
 	createPushedBuffer,
 	GraphLogController,
 	Ticker,
+	ValueMap,
 	ViewProps,
 } from '@tweakpane/core';
 
@@ -44,8 +45,10 @@ export class FpsGraphController implements Controller<FpsView> {
 		this.graphC_ = new GraphLogController(doc, {
 			formatter: createNumberFormatter(0),
 			lineCount: config.lineCount,
-			maxValue: config.maxValue,
-			minValue: config.minValue,
+			props: ValueMap.fromObject({
+				maxValue: config.maxValue,
+				minValue: config.minValue,
+			}),
 			value: this.value_,
 			viewProps: this.viewProps,
 		});
