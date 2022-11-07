@@ -5,6 +5,7 @@ import {CubicBezierBladePlugin} from './cubic-bezier/plugin';
 import {FpsGraphBladePlugin} from './fps-graph/plugin';
 import {IntervalInputPlugin} from './interval/plugin';
 import {RadioGridBladePlugin} from './radio-grid/blade-plugin';
+import { WaveformPlugin } from './waveform/plugin';
 import {
 	RadioGruidBooleanInputPlugin,
 	RadioGruidNumberInputPlugin,
@@ -22,4 +23,5 @@ export const plugins: TpPlugin[] = [
 	RadioGruidBooleanInputPlugin,
 	RadioGruidNumberInputPlugin,
 	RadioGruidStringInputPlugin,
+	WaveformPlugin
 ];

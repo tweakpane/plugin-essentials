@@ -29,13 +29,44 @@
 	<script src="../node_modules/tweakpane/dist/tweakpane.js"></script>
 	<script src="../dist/tweakpane-plugin-essentials.js"></script>
 	<script>
+		window.ctx = new AudioContext();
+		window.anl = ctx.createAnalyser();
+		window.osc = null;
+
+		anl.connect(ctx.destination);
+		anl.fftSize = 2048;
+
 		const params = {
 			interval: {min: 40, max: 60},
 			radiogrid: 25,
+			smallNumberArray: [ 5, 6, 7, 8, 9, 3, 9, 8, 7, 6, 5 ],
+			uint8Array: new Uint8Array(8).fill(0).map((_, i) => Math.pow(2, i+1) - 1),
+			uint16Array: new Uint16Array(16).fill(0).map((_, i) => Math.pow(2, i+1) - 1),
+			uint32Array: new Uint32Array(32).fill(0).map((_, i) => Math.pow(2, i+1) - 1),
+			webAudioApiAnlBuf: new Uint8Array(anl.frequencyBinCount)
 		};
+
+		setInterval(() => {
+			if (osc)
+				osc.frequency.value = osc.frequency.value > 100 ? 40 : osc.frequency.value + 1;
+		}, 500);
+		
+		setInterval(() => {
+			anl.getByteTimeDomainData(params.webAudioApiAnlBuf);
+			panes[2].refresh();
+		}, 1);
+
+		setInterval(() => {
+			params.smallNumberArray = params.smallNumberArray.map(v => Math.max(0, Math.min(10, v + (Math.random() * 2 - 1) * 0.1)) );
+			params.uint8Array = params.uint8Array.map(v => ++v );
+			params.uint16Array = params.uint16Array.map(v => v+1e2 );
+			params.uint32Array = params.uint32Array.map(v => v+1e8 );
+		}, 50);
+
 		const panes = [
 			'Input bindings',
 			'Blades',
+			'Monitors'
 		].map((title) => {
 			const pane = new Tweakpane.Pane({
 				container: document.querySelector('.wrapper'),
@@ -113,6 +144,58 @@
 		}).on('click', (ev) => {
 			console.log(ev);
 		});
+
+		// Monitors
+		panes[2].addMonitor(params, 'smallNumberArray', {
+			view: 'waveform',
+			min: 0,
+			max: 10,
+			interval: 100
+		})
+
+		panes[2].addMonitor(params, 'uint8Array', {
+			view: 'waveform',
+			min: 0,
+			max: Math.pow(2, 8),
+			interval: 500
+		})
+
+		panes[2].addMonitor(params, 'uint16Array', {
+			view: 'waveform',
+			min: 0,
+			max: Math.pow(2, 16),
+			interval: 500
+		})
+
+		panes[2].addMonitor(params, 'uint32Array', {
+			view: 'waveform',
+			min: 0,
+			max: Math.pow(2, 32),
+			interval: 500,
+			style: 'bezier'
+		})
+
+		panes[2].addMonitor(params, 'webAudioApiAnlBuf', {
+			view: 'waveform',
+			min: -50,
+			max: Math.pow(2, 8) + 50,
+			interval: 0,
+		})
+
+		const audioToggleBtn = panes[2].addButton({ 
+      title: "Start Web Audio API" 
+    }).on("click", () => { 
+			if (osc) {
+				osc.stop();
+				osc = null;
+				audioToggleBtn.title = 'Start Web Audio API';
+			} else {
+				osc = ctx.createOscillator();
+				osc.connect(anl);
+				osc.start();
+				audioToggleBtn.title = 'Stop Web Audio API';
+			}
+    });
 
 		window.panes = panes;
 
