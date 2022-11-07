@@ -132,5 +132,29 @@ pane.addBlade({
 });
 ```
 
+### Waveform
+
+```js
+const params = {
+  prop1: [ 5, 6, 7, 8, 9, 3, 9, 8, 7, 6, 5 ],
+  prop2: new Uint8Array(8).fill(0).map((_, i) => Math.pow(2, i+1) - 1),
+};
+
+pane.addMonitor(params, 'prop1', {
+  view: 'waveform',
+  min: 0,
+  max: 10,
+  style: 'bezier',
+  interval: 100,
+})
+
+pane.addMonitor(params, 'prop2', {
+  view: 'waveform',
+  min: 0,
+  max: Math.pow(2, 8),
+  interval: 500
+})
+```
+
 
 [tweakpane]: https://github.com/cocopon/tweakpane/

@@ -20,7 +20,7 @@ export class WaveformController implements Controller<WaveformView> {
 		this.props = config.props;
 		this.viewProps = config.viewProps;
 		this.viewProps.handleDispose(() => {
-			console.error('TODO: dispose controller');
+			// Nothing to do
 		});
 
 		this.view = new WaveformView(doc, {
