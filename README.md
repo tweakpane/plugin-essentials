@@ -1,7 +1,7 @@
 # Tweakpane essentials plugin
 Essential components for [Tweakpane][tweakpane].
 
-![](https://user-images.githubusercontent.com/602961/122059107-41ec8c80-ce27-11eb-9d17-08c522efb05f.png)
+![plugin- essentials](https://user-images.githubusercontent.com/38029550/200204309-76ce8fd4-31a6-487d-b87f-0e868eda7a52.png)
 
 
 ## Installation
@@ -133,6 +133,7 @@ pane.addBlade({
 ```
 
 ### Waveform
+![waveform](https://user-images.githubusercontent.com/38029550/200204325-734b04af-9b4a-4a53-972e-f3b1eabdd9a1.png)
 
 ```js
 const params = {
