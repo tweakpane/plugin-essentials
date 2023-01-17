@@ -3,6 +3,7 @@ import {
 	PointerData,
 	PointerHandler,
 	PointerHandlerEvent,
+	SliderProps,
 	Value,
 	ValueChangeOptions,
 	ValueController,
@@ -13,8 +14,7 @@ import {Interval} from '../model/interval';
 import {RangeSliderView} from '../view/range-slider';
 
 interface Config {
-	maxValue: number;
-	minValue: number;
+	sliderProps: SliderProps;
 	value: Value<Interval>;
 	viewProps: ViewProps;
 }
@@ -24,11 +24,10 @@ type Grabbing = 'min' | 'length' | 'max';
 export class RangeSliderController
 	implements ValueController<Interval, RangeSliderView>
 {
+	public readonly sliderProps: SliderProps;
 	public readonly value: Value<Interval>;
 	public readonly view: RangeSliderView;
 	public readonly viewProps: ViewProps;
-	private maxValue_: number;
-	private minValue_: number;
 	private grabbing_: Grabbing | null = null;
 	private grabOffset_ = 0;
 
@@ -37,14 +36,12 @@ export class RangeSliderController
 		this.onPointerMove_ = this.onPointerMove_.bind(this);
 		this.onPointerUp_ = this.onPointerUp_.bind(this);
 
-		this.maxValue_ = config.maxValue;
-		this.minValue_ = config.minValue;
+		this.sliderProps = config.sliderProps;
 		this.viewProps = config.viewProps;
 
 		this.value = config.value;
 		this.view = new RangeSliderView(doc, {
-			maxValue: config.maxValue,
-			minValue: config.minValue,
+			sliderProps: this.sliderProps,
 			value: this.value,
 			viewProps: config.viewProps,
 		});
@@ -71,7 +68,9 @@ export class RangeSliderController
 		}
 
 		const p = (data.point.x + this.ofs_()) / data.bounds.width;
-		return mapRange(p, 0, 1, this.minValue_, this.maxValue_);
+		const min = this.sliderProps.get('minValue');
+		const max = this.sliderProps.get('maxValue');
+		return mapRange(p, 0, 1, min, max);
 	}
 
 	private onPointerDown_(ev: PointerHandlerEvent) {
@@ -81,8 +80,10 @@ export class RangeSliderController
 
 		const p = ev.data.point.x / ev.data.bounds.width;
 		const v = this.value.rawValue;
-		const pmin = mapRange(v.min, this.minValue_, this.maxValue_, 0, 1);
-		const pmax = mapRange(v.max, this.minValue_, this.maxValue_, 0, 1);
+		const min = this.sliderProps.get('minValue');
+		const max = this.sliderProps.get('maxValue');
+		const pmin = mapRange(v.min, min, max, 0, 1);
+		const pmax = mapRange(v.max, min, max, 0, 1);
 
 		if (Math.abs(pmax - p) <= 0.025) {
 			this.grabbing_ = 'max';
@@ -90,13 +91,7 @@ export class RangeSliderController
 			this.grabbing_ = 'min';
 		} else if (p >= pmin && p <= pmax) {
 			this.grabbing_ = 'length';
-			this.grabOffset_ = mapRange(
-				p - pmin,
-				0,
-				1,
-				0,
-				this.maxValue_ - this.minValue_,
-			);
+			this.grabOffset_ = mapRange(p - pmin, 0, 1, 0, max - min);
 		} else if (p < pmin) {
 			this.grabbing_ = 'min';
 			this.onPointerMove_(ev);
@@ -115,6 +110,8 @@ export class RangeSliderController
 			return;
 		}
 
+		const rmin = this.sliderProps.get('minValue');
+		const rmax = this.sliderProps.get('maxValue');
 		if (this.grabbing_ === 'min') {
 			this.value.setRawValue(new Interval(v, this.value.rawValue.max), opts);
 		} else if (this.grabbing_ === 'max') {
@@ -123,12 +120,12 @@ export class RangeSliderController
 			const len = this.value.rawValue.length;
 			let min = v - this.grabOffset_;
 			let max = min + len;
-			if (min < this.minValue_) {
-				min = this.minValue_;
-				max = this.minValue_ + len;
-			} else if (max > this.maxValue_) {
-				min = this.maxValue_ - len;
-				max = this.maxValue_;
+			if (min < rmin) {
+				min = rmin;
+				max = rmin + len;
+			} else if (max > rmax) {
+				min = rmax - len;
+				max = rmax;
 			}
 			this.value.setRawValue(new Interval(min, max), opts);
 		}

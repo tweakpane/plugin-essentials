@@ -100,9 +100,11 @@ export const IntervalInputPlugin: InputBindingPlugin<
 				constraint: c.edge,
 				draggingScale: getSuitableDraggingScale(c.edge, midValue),
 				formatter: formatter,
-				maxValue: drc.values.get('max'),
-				minValue: drc.values.get('min'),
 				parser: parseNumber,
+				sliderProps: new ValueMap({
+					maxValue: drc.values.value('max'),
+					minValue: drc.values.value('min'),
+				}),
 				value: v,
 				viewProps: args.viewProps,
 			});

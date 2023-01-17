@@ -2,6 +2,7 @@ import {
 	ClassName,
 	constrainRange,
 	mapRange,
+	SliderProps,
 	Value,
 	View,
 	ViewProps,
@@ -10,8 +11,7 @@ import {
 import {Interval} from '../model/interval';
 
 interface Config {
-	maxValue: number;
-	minValue: number;
+	sliderProps: SliderProps;
 	value: Value<Interval>;
 	viewProps: ViewProps;
 }
@@ -23,20 +23,22 @@ export class RangeSliderView implements View {
 	public readonly knobElements: [HTMLElement, HTMLElement];
 	public readonly barElement: HTMLElement;
 	public readonly trackElement: HTMLElement;
-	private readonly maxValue_: number;
-	private readonly minValue_: number;
+	private readonly sliderProps_: SliderProps;
 	private readonly value_: Value<Interval>;
 
 	constructor(doc: Document, config: Config) {
-		this.maxValue_ = config.maxValue;
-		this.minValue_ = config.minValue;
+		this.onSliderPropsChange_ = this.onSliderPropsChange_.bind(this);
+		this.onValueChange_ = this.onValueChange_.bind(this);
+
+		this.sliderProps_ = config.sliderProps;
+		this.sliderProps_.emitter.on('change', this.onSliderPropsChange_);
 
 		this.element = doc.createElement('div');
 		this.element.classList.add(className());
 		config.viewProps.bindClassModifiers(this.element);
 
 		this.value_ = config.value;
-		this.value_.emitter.on('change', this.onValueChange_.bind(this));
+		this.value_.emitter.on('change', this.onValueChange_);
 
 		const trackElem = doc.createElement('div');
 		trackElem.classList.add(className('t'));
@@ -56,20 +58,16 @@ export class RangeSliderView implements View {
 		});
 		this.knobElements = [knobElems[0], knobElems[1]];
 
-		this.update();
+		this.update_();
 	}
 
 	private valueToX_(value: number): number {
-		return (
-			constrainRange(
-				mapRange(value, this.minValue_, this.maxValue_, 0, 1),
-				0,
-				1,
-			) * 100
-		);
+		const min = this.sliderProps_.get('minValue');
+		const max = this.sliderProps_.get('maxValue');
+		return constrainRange(mapRange(value, min, max, 0, 1), 0, 1) * 100;
 	}
 
-	public update(): void {
+	private update_(): void {
 		const v = this.value_.rawValue;
 
 		if (v.length === 0) {
@@ -87,7 +85,11 @@ export class RangeSliderView implements View {
 		});
 	}
 
+	private onSliderPropsChange_() {
+		this.update_();
+	}
+
 	private onValueChange_() {
-		this.update();
+		this.update_();
 	}
 }

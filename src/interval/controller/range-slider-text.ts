@@ -3,6 +3,7 @@ import {
 	Formatter,
 	Parser,
 	PointNdTextController,
+	SliderProps,
 	Value,
 	ValueController,
 	ValueMap,
@@ -18,9 +19,8 @@ interface Config {
 	constraint: Constraint<number> | undefined;
 	draggingScale: number;
 	formatter: Formatter<number>;
-	maxValue: number;
-	minValue: number;
 	parser: Parser<number>;
+	sliderProps: SliderProps;
 	value: Value<Interval>;
 	viewProps: ViewProps;
 }
