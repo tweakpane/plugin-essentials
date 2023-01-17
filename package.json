@@ -1,6 +1,6 @@
 {
   "name": "@tweakpane/plugin-essentials",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "description": "Essential components for Tweakpane",
   "main": "dist/tweakpane-plugin-essentials.js",
   "types": "dist/types/index.d.ts",
