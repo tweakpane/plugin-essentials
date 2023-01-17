@@ -5,6 +5,7 @@ import {
 	createNumberFormatter,
 	createRangeConstraint,
 	createStepConstraint,
+	DefiniteRangeConstraint,
 	findConstraint,
 	Formatter,
 	getBaseStep,
@@ -16,7 +17,6 @@ import {
 	parseNumber,
 	parseParams,
 	PointNdTextController,
-	RangeConstraint,
 	TpError,
 	ValueMap,
 } from '@tweakpane/core';
@@ -93,15 +93,15 @@ export const IntervalInputPlugin: InputBindingPlugin<
 			args.params.format ??
 			createNumberFormatter(getSuitableDecimalDigits(c.edge, midValue));
 
-		const rc = c.edge && findConstraint(c.edge, RangeConstraint);
-		if (rc?.minValue !== undefined && rc?.maxValue !== undefined) {
+		const drc = c.edge && findConstraint(c.edge, DefiniteRangeConstraint);
+		if (drc) {
 			return new RangeSliderTextController(args.document, {
 				baseStep: getBaseStep(c.edge),
 				constraint: c.edge,
-				draggingScale: getSuitableDraggingScale(rc, midValue),
+				draggingScale: getSuitableDraggingScale(c.edge, midValue),
 				formatter: formatter,
-				maxValue: rc.maxValue,
-				minValue: rc.minValue,
+				maxValue: drc.values.get('max'),
+				minValue: drc.values.get('min'),
 				parser: parseNumber,
 				value: v,
 				viewProps: args.viewProps,
