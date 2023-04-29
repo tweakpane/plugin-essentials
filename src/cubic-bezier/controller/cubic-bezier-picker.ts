@@ -8,12 +8,11 @@ import {
 	ViewProps,
 } from '@tweakpane/core';
 
-import {CubicBezier, CubicBezierAssembly} from '../model/cubic-bezier';
-import {CubicBezierPickerView} from '../view/cubic-bezier-picker';
-import {CubicBezierGraphController} from './cubic-bezier-graph';
+import {CubicBezier, CubicBezierAssembly} from '../model/cubic-bezier.js';
+import {CubicBezierPickerView} from '../view/cubic-bezier-picker.js';
+import {CubicBezierGraphController} from './cubic-bezier-graph.js';
 
 interface Axis {
-	baseStep: number;
 	textProps: NumberTextProps;
 }
 
@@ -41,7 +40,7 @@ export class CubicBezierPickerController
 		});
 
 		this.gc_ = new CubicBezierGraphController(doc, {
-			baseStep: config.axis.baseStep,
+			keyScale: config.axis.textProps.value('keyScale'),
 			value: this.value,
 			viewProps: this.viewProps,
 		});

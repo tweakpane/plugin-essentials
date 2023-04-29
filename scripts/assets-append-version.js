@@ -1,9 +1,13 @@
-'use strict';
+/* eslint-disable no-console */
+/* eslint-env node */
 
-const Fs = require('fs');
-const Glob = require('glob');
-const Path = require('path');
-const Package = require('../package');
+import Fs from 'fs';
+import Glob from 'glob';
+import Path from 'path';
+
+const Package = JSON.parse(
+	Fs.readFileSync(new URL('../package.json', import.meta.url)),
+);
 
 const PATTERN = 'dist/*';
 

@@ -7,8 +7,8 @@ import {
 	ViewProps,
 } from '@tweakpane/core';
 
-import {RadioPropsObject} from '../view/radio';
-import {RadioController} from './radio';
+import {RadioPropsObject} from '../view/radio.js';
+import {RadioController} from './radio.js';
 
 interface CellConfig<T> {
 	title: string;

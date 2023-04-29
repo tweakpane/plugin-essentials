@@ -1,9 +1,9 @@
-import {BladeApi, LabeledValueController, Value} from '@tweakpane/core';
+import {BladeApi, LabeledValueBladeController, Value} from '@tweakpane/core';
 
-import {RadioController} from '../controller/radio';
-import {RadioGridController} from '../controller/radio-grid';
-import {RadioCellApi} from './radio-cell-api';
-import {TpRadioGridChangeEvent} from './tp-radio-grid-event';
+import {RadioController} from '../controller/radio.js';
+import {RadioGridController} from '../controller/radio-grid.js';
+import {RadioCellApi} from './radio-cell-api.js';
+import {TpRadioGridChangeEvent} from './tp-radio-grid-event.js';
 
 interface RadioGridApiEvents<T> {
 	change: {
@@ -12,14 +12,16 @@ interface RadioGridApiEvents<T> {
 }
 
 export class RadioGridApi<T> extends BladeApi<
-	LabeledValueController<T, RadioGridController<T>>
+	LabeledValueBladeController<T, RadioGridController<T>>
 > {
 	private cellToApiMap_: Map<RadioController, RadioCellApi> = new Map();
 
-	constructor(controller: LabeledValueController<T, RadioGridController<T>>) {
+	constructor(
+		controller: LabeledValueBladeController<T, RadioGridController<T>>,
+	) {
 		super(controller);
 
-		const gc = this.controller_.valueController;
+		const gc = this.controller.valueController;
 		gc.cellControllers.forEach((cc) => {
 			const api = new RadioCellApi(cc);
 			this.cellToApiMap_.set(cc, api);
@@ -27,11 +29,11 @@ export class RadioGridApi<T> extends BladeApi<
 	}
 
 	get value(): Value<T> {
-		return this.controller_.value;
+		return this.controller.value;
 	}
 
 	public cell(x: number, y: number): RadioCellApi | undefined {
-		const gc = this.controller_.valueController;
+		const gc = this.controller.valueController;
 		const cc = gc.cellControllers[y * gc.size[0] + x];
 		return this.cellToApiMap_.get(cc);
 	}
@@ -41,8 +43,8 @@ export class RadioGridApi<T> extends BladeApi<
 		handler: (ev: RadioGridApiEvents<T>[EventName]['event']) => void,
 	): void {
 		const bh = handler.bind(this);
-		this.controller_.value.emitter.on(eventName, (ev) => {
-			const gc = this.controller_.valueController;
+		this.controller.value.emitter.on(eventName, (ev) => {
+			const gc = this.controller.valueController;
 			const cc = gc.findCellByValue(ev.rawValue);
 			if (!cc) {
 				return;
@@ -58,7 +60,6 @@ export class RadioGridApi<T> extends BladeApi<
 					capi,
 					[i % gc.size[0], Math.floor(i / gc.size[0])],
 					ev.rawValue,
-					undefined,
 				),
 			);
 		});

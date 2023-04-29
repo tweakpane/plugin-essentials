@@ -3,6 +3,7 @@
   "version": "0.1.8",
   "description": "Essential components for Tweakpane",
   "main": "dist/tweakpane-plugin-essentials.js",
+  "type": "module",
   "types": "dist/types/index.d.ts",
   "author": "cocopon",
   "license": "MIT",
@@ -12,7 +13,7 @@
   "scripts": {
     "prepack": "run-s clean build",
     "prepublishOnly": "npm test",
-    "start": "npm run watch",
+    "start": "run-p watch server",
     "test": "eslint --ext .ts 'src/**/*.ts'",
     "assets": "run-s clean build assets:version assets:zip",
     "assets:version": "node scripts/assets-append-version.js",
@@ -25,6 +26,7 @@
     "format": "run-p format:*",
     "format:scss": "prettier --parser scss --write 'src/sass/**/*.scss'",
     "format:ts": "eslint --ext .ts --fix 'src/**/*.ts'",
+    "server": "http-server -c-1 -o /test/browser.html",
     "watch": "run-p watch:*",
     "watch:sass": "onchange --initial --kill 'src/sass/**/*.scss' -- npm run build:dev",
     "watch:ts": "onchange --initial --kill 'src/**/*.ts' -- rollup --config rollup.config.js"
@@ -34,14 +36,14 @@
     "@rollup/plugin-node-resolve": "^13.0.0",
     "@rollup/plugin-replace": "^2.4.1",
     "@rollup/plugin-typescript": "^8.2.0",
-    "@tweakpane/core": "^1.1.4",
+    "@tweakpane/core": "^2.0.0-alpha.0",
     "@types/chai": "^4.2.18",
     "@types/mocha": "^8.2.2",
     "@typescript-eslint/eslint-plugin": "5.33",
     "@typescript-eslint/parser": "^5.33.0",
     "autoprefixer": "^10.2.4",
     "chai": "^4.3.4",
-    "eslint": "^7.20.0",
+    "eslint": "^8.39.0",
     "eslint-config-prettier": "^8.1.0",
     "eslint-plugin-prettier": "^3.3.1",
     "eslint-plugin-simple-import-sort": "^7.0.0",
@@ -49,7 +51,7 @@
     "npm-run-all": "^4.1.5",
     "onchange": "^7.1.0",
     "postcss": "^8.2.6",
-    "prettier": "^2.2.1",
+    "prettier": "^2.8.8",
     "rimraf": "^3.0.2",
     "rollup": "^2.39.1",
     "rollup-plugin-cleanup": "^3.2.1",
@@ -58,6 +60,6 @@
     "typescript": "4.7"
   },
   "peerDependencies": {
-    "tweakpane": "^3.1.4"
+    "tweakpane": "^4.0.0-alpha.0"
   }
 }

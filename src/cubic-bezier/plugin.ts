@@ -3,19 +3,20 @@ import {
 	Constraint,
 	createNumberFormatter,
 	createValue,
-	LabeledValueController,
-	ParamsParsers,
-	parseParams,
+	LabeledValueBladeController,
+	LabelPropsObject,
+	parseRecord,
 	PickerLayout,
 	PointNdConstraint,
 	RangeConstraint,
 	ValueMap,
+	VERSION,
 } from '@tweakpane/core';
 import {BaseBladeParams} from 'tweakpane';
 
-import {CubicBezierApi} from './api/cubic-bezier';
-import {CubicBezierController} from './controller/cubic-bezier';
-import {CubicBezier, CubicBezierAssembly} from './model/cubic-bezier';
+import {CubicBezierApi} from './api/cubic-bezier.js';
+import {CubicBezierController} from './controller/cubic-bezier.js';
+import {CubicBezier, CubicBezierAssembly} from './model/cubic-bezier.js';
 
 export interface CubicBezierBladeParams extends BaseBladeParams {
 	value: [number, number, number, number];
@@ -43,11 +44,10 @@ function createConstraint(): Constraint<CubicBezier> {
 export const CubicBezierBladePlugin: BladePlugin<CubicBezierBladeParams> = {
 	id: 'cubic-bezier',
 	type: 'blade',
-	css: '__css__',
+	core: VERSION,
 
 	accept(params) {
-		const p = ParamsParsers;
-		const result = parseParams(params, {
+		const result = parseRecord(params, (p) => ({
 			value: p.required.array(p.required.number),
 			view: p.required.constant('cubicbezier'),
 
@@ -56,7 +56,7 @@ export const CubicBezierBladePlugin: BladePlugin<CubicBezierBladeParams> = {
 			picker: p.optional.custom<PickerLayout>((v) => {
 				return v === 'inline' || v === 'popup' ? v : undefined;
 			}),
-		});
+		}));
 		return result ? {params: result} : null;
 	},
 	controller(args) {
@@ -67,9 +67,9 @@ export const CubicBezierBladePlugin: BladePlugin<CubicBezierBladeParams> = {
 		});
 		const vc = new CubicBezierController(args.document, {
 			axis: {
-				baseStep: 0.1,
 				textProps: ValueMap.fromObject({
-					draggingScale: 0.01,
+					keyScale: 0.1,
+					pointerScale: 0.01,
 					formatter: createNumberFormatter(2),
 				}),
 			},
@@ -78,16 +78,17 @@ export const CubicBezierBladePlugin: BladePlugin<CubicBezierBladeParams> = {
 			value: v,
 			viewProps: args.viewProps,
 		});
-		return new LabeledValueController(args.document, {
+		return new LabeledValueBladeController(args.document, {
 			blade: args.blade,
 			props: ValueMap.fromObject({
 				label: args.params.label,
-			}),
+			} as LabelPropsObject),
+			value: v,
 			valueController: vc,
 		});
 	},
 	api(args) {
-		if (!(args.controller instanceof LabeledValueController)) {
+		if (!(args.controller instanceof LabeledValueBladeController)) {
 			return null;
 		}
 		if (!(args.controller.valueController instanceof CubicBezierController)) {

@@ -1,4 +1,7 @@
-.#{$prefix}-cbzv {
+@use 'sass:math';
+@use '../../node_modules/@tweakpane/core/lib/sass/tp';
+
+.#{tp.$prefix}-cbzv {
 	position: relative;
 
 	// Head
@@ -7,24 +10,24 @@
 	}
 	// Button
 	&_b {
-		@extend %button;
+		@extend %tp-button;
 
 		margin-right: 4px;
 		position: relative;
-		width: var(--bld-us);
+		width: tp.cssVar('container-unit-size');
 
 		svg {
 			display: block;
 			height: 16px;
 			left: 50%;
-			margin-left: -(16px / 2);
-			margin-top: -(16px / 2);
+			margin-left: math.div(-16px, 2);
+			margin-top: math.div(-16px, 2);
 			position: absolute;
 			top: 50%;
 			width: 16px;
 
 			path {
-				stroke: var(--bs-bg);
+				stroke: tp.cssVar('base-bg');
 				stroke-width: 2;
 			}
 		}
@@ -39,12 +42,12 @@
 		margin-top: 0;
 		opacity: 0;
 		overflow: hidden;
-		transition: height $fold-transition-duration ease-in-out,
-			opacity $fold-transition-duration linear,
-			margin $fold-transition-duration ease-in-out;
+		transition: height tp.$fold-transition-duration ease-in-out,
+			opacity tp.$fold-transition-duration linear,
+			margin tp.$fold-transition-duration ease-in-out;
 	}
 	&#{&}-expanded &_p {
-		margin-top: var(--bld-s);
+		margin-top: tp.cssVar('container-unit-spacing');
 		opacity: 1;
 	}
 	&#{&}-cpl &_p {
@@ -52,30 +55,30 @@
 	}
 
 	// Popup
-	.#{$prefix}-popv {
-		left: calc(-1 * var(--cnt-h-p));
+	.#{tp.$prefix}-popv {
+		left: calc(-1 * #{tp.cssVar('container-h-padding')});
 		position: absolute;
-		right: calc(-1 * var(--cnt-h-p));
-		top: var(--bld-us);
+		right: calc(-1 * #{tp.cssVar('container-h-padding')});
+		top: tp.cssVar('container-unit-size');
 	}
 }
 
 // Picker
-.#{$prefix}-cbzpv {
+.#{tp.$prefix}-cbzpv {
 	&_t {
-		margin-top: var(--bld-s);
+		margin-top: tp.cssVar('container-unit-spacing');
 	}
 }
 
 // Graph
-.#{$prefix}-cbzgv {
-	@extend %input;
+.#{tp.$prefix}-cbzgv {
+	@extend %tp-input;
 
 	height: auto;
 	overflow: hidden;
 	position: relative;
 
-	&.#{$prefix}-v-disabled {
+	&.#{tp.$prefix}-v-disabled {
 		opacity: 0.5;
 	}
 
@@ -90,29 +93,29 @@
 	&_g {
 		cursor: pointer;
 		display: block;
-		height: calc(var(--bld-us) * 5);
+		height: calc(#{tp.cssVar('container-unit-size')} * 5);
 		width: 100%;
 	}
 	// Guide
 	&_u {
 		opacity: 0.1;
-		stroke: var(--in-fg);
+		stroke: tp.cssVar('input-fg');
 		stroke-dasharray: 1;
 	}
 	// Curve
 	&_l {
 		fill: transparent;
-		stroke: var(--in-fg);
+		stroke: tp.cssVar('input-fg');
 	}
 	// Vectors
 	&_v {
 		opacity: 0.5;
-		stroke: var(--in-fg);
+		stroke: tp.cssVar('input-fg');
 		stroke-dasharray: 1;
 	}
 	// Handles
 	&_h {
-		border: var(--in-fg) solid 1px;
+		border: tp.cssVar('input-fg') solid 1px;
 		border-radius: 50%;
 		box-sizing: border-box;
 		height: 4px;
@@ -124,13 +127,13 @@
 	}
 
 	&:focus &_h-sel {
-		background-color: var(--in-fg);
+		background-color: tp.cssVar('input-fg');
 		border-width: 0;
 	}
 }
 
 // Preview
-.#{$prefix}-cbzprvv {
+.#{tp.$prefix}-cbzprvv {
 	cursor: pointer;
 	height: 4px;
 	padding: 4px 0;
@@ -146,11 +149,11 @@
 	// Ticks
 	&_t {
 		opacity: 0.5;
-		stroke: var(--mo-fg);
+		stroke: tp.cssVar('monitor-fg');
 	}
 	// Marker
 	&_m {
-		background-color: var(--mo-fg);
+		background-color: tp.cssVar('monitor-fg');
 		border-radius: 50%;
 		height: 4px;
 		margin-left: -2px;

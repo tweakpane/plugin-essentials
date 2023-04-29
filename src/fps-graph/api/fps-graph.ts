@@ -1,15 +1,13 @@
-import {BladeApi, LabelController} from '@tweakpane/core';
+import {BladeApi} from '@tweakpane/core';
 
-import {FpsGraphController} from '../controller/fps-graph';
+import {FpsGraphBladeController} from '../controller/fps-graph-blade.js';
 
-export class FpsGraphBladeApi extends BladeApi<
-	LabelController<FpsGraphController>
-> {
+export class FpsGraphBladeApi extends BladeApi<FpsGraphBladeController> {
 	public begin(): void {
-		this.controller_.valueController.begin();
+		this.controller.valueController.begin();
 	}
 
 	public end(): void {
-		this.controller_.valueController.end();
+		this.controller.valueController.end();
 	}
 }

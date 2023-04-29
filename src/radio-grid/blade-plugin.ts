@@ -2,16 +2,16 @@ import {
 	BaseBladeParams,
 	BladePlugin,
 	createValue,
-	LabeledValueController,
+	LabeledValueBladeController,
 	LabelPropsObject,
-	ParamsParser,
-	ParamsParsers,
-	parseParams,
+	MicroParser,
+	parseRecord,
 	ValueMap,
+	VERSION,
 } from '@tweakpane/core';
 
-import {RadioGridApi} from './api/radio-grid';
-import {RadioGridController} from './controller/radio-grid';
+import {RadioGridApi} from './api/radio-grid.js';
+import {RadioGridController} from './controller/radio-grid.js';
 
 export interface RadioGridBladeParams<T> extends BaseBladeParams {
 	cells: (
@@ -35,11 +35,11 @@ export const RadioGridBladePlugin = (function <T>(): BladePlugin<
 	return {
 		id: 'radiogrid',
 		type: 'blade',
+		core: VERSION,
 
 		accept(params) {
-			const p = ParamsParsers;
-			const result = parseParams<RadioGridBladeParams<T>>(params, {
-				cells: p.required.function as ParamsParser<
+			const result = parseRecord<RadioGridBladeParams<T>>(params, (p) => ({
+				cells: p.required.function as MicroParser<
 					(
 						x: number,
 						y: number,
@@ -49,32 +49,34 @@ export const RadioGridBladePlugin = (function <T>(): BladePlugin<
 					}
 				>,
 				groupName: p.required.string,
-				size: p.required.array(p.required.number) as ParamsParser<
+				size: p.required.array(p.required.number) as MicroParser<
 					[number, number]
 				>,
-				value: p.required.raw as ParamsParser<T>,
+				value: p.required.raw as MicroParser<T>,
 				view: p.required.constant('radiogrid'),
 
 				label: p.optional.string,
-			});
+			}));
 			return result ? {params: result} : null;
 		},
 		controller(args) {
-			return new LabeledValueController(args.document, {
+			const value = createValue(args.params.value);
+			return new LabeledValueBladeController(args.document, {
 				blade: args.blade,
 				props: ValueMap.fromObject<LabelPropsObject>({
 					label: args.params.label,
 				}),
+				value: value,
 				valueController: new RadioGridController(args.document, {
 					groupName: args.params.groupName,
 					cellConfig: args.params.cells,
 					size: args.params.size,
-					value: createValue(args.params.value),
+					value: value,
 				}),
 			});
 		},
 		api(args) {
-			if (!(args.controller instanceof LabeledValueController)) {
+			if (!(args.controller instanceof LabeledValueBladeController)) {
 				return null;
 			}
 			if (!(args.controller.valueController instanceof RadioGridController)) {

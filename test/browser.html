@@ -26,9 +26,10 @@
 <body>
 	<div class="wrapper">
 	</div>
-	<script src="../node_modules/tweakpane/dist/tweakpane.js"></script>
-	<script src="../dist/tweakpane-plugin-essentials.js"></script>
-	<script>
+	<script type="module">
+		import {Pane} from '../node_modules/tweakpane/dist/tweakpane.js';
+		import * as TweakpaneEssentialsPlugin from '../dist/tweakpane-plugin-essentials.js';
+
 		const params = {
 			interval: {min: 40, max: 60},
 			radiogrid: 25,
@@ -37,7 +38,7 @@
 			'Input bindings',
 			'Blades',
 		].map((title) => {
-			const pane = new Tweakpane.Pane({
+			const pane = new Pane({
 				container: document.querySelector('.wrapper'),
 				title: title,
 			});
@@ -49,7 +50,7 @@
 		});
 
 		// Input bindings
-		panes[0].addInput(params, 'interval', {
+		panes[0].addBinding(params, 'interval', {
 			format: (v) => v.toFixed(1),
 			min: 20,
 			max: 80,
@@ -58,7 +59,7 @@
 		});
 
 		const scales = [10, 20, 25, 50, 75, 100];
-		panes[0].addInput(params, 'radiogrid', {
+		panes[0].addBinding(params, 'radiogrid', {
 			view: 'radiogrid',
 			groupName: 'scale',
 			size: [3, 2],
@@ -76,7 +77,7 @@
 			view: 'fpsgraph',
 
 			label: 'fpsgraph',
-			lineCount: 2,
+			rows: 2,
 		});
 		function render() {
 			fpsGraph.begin();
@@ -123,7 +124,7 @@
 					wrapperElem.classList.add('wrapper');
 					document.body.appendChild(wrapperElem);
 
-					const newPane = new Tweakpane.Pane({
+					const newPane = new Pane({
 						container: wrapperElem,
 					});
 					newPane.registerPlugin(TweakpaneEssentialsPlugin);

@@ -1,13 +1,8 @@
-import {
-	BladeApi,
-	ButtonController,
-	Emitter,
-	LabelController,
-} from '@tweakpane/core';
+import {BladeApi, ButtonController, Emitter} from '@tweakpane/core';
 
-import {ButtonGridController} from '../controller/button-grid';
-import {ButtonCellApi} from './button-cell';
-import {TpButtonGridEvent} from './tp-button-grid-event';
+import {ButtonGridBladeController} from '../controller/button-grid-blade.js';
+import {ButtonCellApi} from './button-cell.js';
+import {TpButtonGridEvent} from './tp-button-grid-event.js';
 
 interface ButtonGridApiEvents {
 	click: {
@@ -15,18 +10,16 @@ interface ButtonGridApiEvents {
 	};
 }
 
-export class ButtonGridApi extends BladeApi<
-	LabelController<ButtonGridController>
-> {
+export class ButtonGridApi extends BladeApi<ButtonGridBladeController> {
 	private emitter_: Emitter<ButtonGridApiEvents>;
 	private cellToApiMap_: Map<ButtonController, ButtonCellApi> = new Map();
 
-	constructor(controller: LabelController<ButtonGridController>) {
+	constructor(controller: ButtonGridBladeController) {
 		super(controller);
 
 		this.emitter_ = new Emitter();
 
-		const gc = this.controller_.valueController;
+		const gc = this.controller.valueController;
 		gc.cellControllers.forEach((cc, i) => {
 			const api = new ButtonCellApi(cc);
 			this.cellToApiMap_.set(cc, api);
@@ -42,7 +35,7 @@ export class ButtonGridApi extends BladeApi<
 	}
 
 	public cell(x: number, y: number): ButtonCellApi | undefined {
-		const gc = this.controller_.valueController;
+		const gc = this.controller.valueController;
 		const cc = gc.cellControllers[y * gc.size[0] + x];
 		return this.cellToApiMap_.get(cc);
 	}

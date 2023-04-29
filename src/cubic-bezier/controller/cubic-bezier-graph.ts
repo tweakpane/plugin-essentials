@@ -12,12 +12,12 @@ import {
 	ViewProps,
 } from '@tweakpane/core';
 
-import {CubicBezier} from '../model/cubic-bezier';
-import {CubicBezierGraphView} from '../view/cubic-bezier-graph';
-import {CubicBezierPreviewView} from '../view/cubic-bezier-preview';
+import {CubicBezier} from '../model/cubic-bezier.js';
+import {CubicBezierGraphView} from '../view/cubic-bezier-graph.js';
+import {CubicBezierPreviewView} from '../view/cubic-bezier-preview.js';
 
 interface Config {
-	baseStep: number;
+	keyScale: Value<number>;
 	value: Value<CubicBezier>;
 	viewProps: ViewProps;
 }
@@ -51,7 +51,7 @@ export class CubicBezierGraphController
 	public readonly viewProps: ViewProps;
 	private readonly prevView_: CubicBezierPreviewView;
 	private sel_: Value<number>;
-	private baseStep_: number;
+	private keyScale_: Value<number>;
 
 	constructor(doc: Document, config: Config) {
 		this.onKeyDown_ = this.onKeyDown_.bind(this);
@@ -60,7 +60,7 @@ export class CubicBezierGraphController
 		this.onPointerMove_ = this.onPointerMove_.bind(this);
 		this.onPointerUp_ = this.onPointerUp_.bind(this);
 
-		this.baseStep_ = config.baseStep;
+		this.keyScale_ = config.keyScale;
 		this.value = config.value;
 		this.sel_ = createValue(0);
 
@@ -158,14 +158,9 @@ export class CubicBezierGraphController
 
 		const index = this.sel_.rawValue;
 		const comps = this.value.rawValue.toObject();
-		comps[index * 2] += getStepForKey(
-			this.baseStep_,
-			getHorizontalStepKeys(ev),
-		);
-		comps[index * 2 + 1] += getStepForKey(
-			this.baseStep_,
-			getVerticalStepKeys(ev),
-		);
+		const keyScale = this.keyScale_.rawValue;
+		comps[index * 2] += getStepForKey(keyScale, getHorizontalStepKeys(ev));
+		comps[index * 2 + 1] += getStepForKey(keyScale, getVerticalStepKeys(ev));
 		this.value.setRawValue(new CubicBezier(...comps), {
 			forceEmit: false,
 			last: false,
@@ -177,8 +172,9 @@ export class CubicBezierGraphController
 			ev.preventDefault();
 		}
 
-		const xStep = getStepForKey(this.baseStep_, getHorizontalStepKeys(ev));
-		const yStep = getStepForKey(this.baseStep_, getVerticalStepKeys(ev));
+		const keyScale = this.keyScale_.rawValue;
+		const xStep = getStepForKey(keyScale, getHorizontalStepKeys(ev));
+		const yStep = getStepForKey(keyScale, getVerticalStepKeys(ev));
 		if (xStep === 0 && yStep === 0) {
 			return;
 		}

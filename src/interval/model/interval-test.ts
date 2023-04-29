@@ -1,7 +1,7 @@
 import {assert} from 'chai';
 import {describe as context, describe, it} from 'mocha';
 
-import {Interval} from './interval';
+import {Interval} from './interval.js';
 
 describe(Interval.name, () => {
 	[

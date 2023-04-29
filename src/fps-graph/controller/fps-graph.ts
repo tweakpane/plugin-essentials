@@ -9,13 +9,13 @@ import {
 	ViewProps,
 } from '@tweakpane/core';
 
-import {Fpswatch} from '../model/stopwatch';
-import {FpsView} from '../view/fps';
+import {Fpswatch} from '../model/stopwatch.js';
+import {FpsView} from '../view/fps.js';
 
 interface Config {
-	lineCount: number;
 	maxValue: number;
 	minValue: number;
+	rows: number;
 	ticker: Ticker;
 	value: BufferedValue<number>;
 	viewProps: ViewProps;
@@ -44,11 +44,11 @@ export class FpsGraphController implements Controller<FpsView> {
 
 		this.graphC_ = new GraphLogController(doc, {
 			formatter: createNumberFormatter(0),
-			lineCount: config.lineCount,
 			props: ValueMap.fromObject({
-				maxValue: config.maxValue,
-				minValue: config.minValue,
+				max: config.maxValue,
+				min: config.minValue,
 			}),
+			rows: config.rows,
 			value: this.value_,
 			viewProps: this.viewProps,
 		});

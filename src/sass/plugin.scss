@@ -1,9 +1,6 @@
-// Import core styles
-@import '../../node_modules/@tweakpane/core/lib/sass/plugin';
-
-@import './button-grid';
-@import './cubic-bezier';
-@import './fps';
-@import './interval';
-@import './radio';
-@import './radio-grid';
+@use './button-grid';
+@use './cubic-bezier';
+@use './fps';
+@use './interval';
+@use './radio';
+@use './radio-grid';

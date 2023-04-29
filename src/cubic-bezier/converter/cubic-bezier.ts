@@ -1,6 +1,6 @@
 import {createNumberFormatter} from '@tweakpane/core';
 
-import {CubicBezier} from '../model/cubic-bezier';
+import {CubicBezier} from '../model/cubic-bezier.js';
 
 export function cubicBezierToString(cb: CubicBezier): string {
 	const formatter = createNumberFormatter(2);
