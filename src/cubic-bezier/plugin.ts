@@ -42,7 +42,7 @@ function createConstraint(): Constraint<CubicBezier> {
 }
 
 export const CubicBezierBladePlugin: BladePlugin<CubicBezierBladeParams> = {
-	id: 'cubic-bezier',
+	id: 'cubicbezier',
 	type: 'blade',
 	core: VERSION,
 

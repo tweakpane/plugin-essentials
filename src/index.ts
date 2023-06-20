@@ -11,6 +11,8 @@ import {
 	RadioGruidStringInputPlugin,
 } from './radio-grid/input-plugin.js';
 
+export const id = 'essentials';
+export const css = '__css__';
 export const plugins: TpPlugin[] = [
 	ButtonGridBladePlugin,
 	CubicBezierBladePlugin,

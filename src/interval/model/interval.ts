@@ -1,4 +1,4 @@
-import {PointNdAssembly} from '@tweakpane/core/dist/esm/input-binding/common/model/point-nd.js';
+import {PointNdAssembly} from '@tweakpane/core';
 
 export interface IntervalObject {
 	max: number;

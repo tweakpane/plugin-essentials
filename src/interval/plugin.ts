@@ -12,12 +12,12 @@ import {
 	NumberInputParams,
 	parseNumber,
 	parseRecord,
+	PointAxis,
 	PointNdTextController,
 	TpError,
 	ValueMap,
 	VERSION,
 } from '@tweakpane/core';
-import {PointAxis} from '@tweakpane/core/dist/esm/common/point-nd/point-axis.js';
 
 import {IntervalConstraint} from './constraint/interval.js';
 import {RangeSliderTextController} from './controller/range-slider-text.js';

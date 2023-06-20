@@ -2,13 +2,13 @@ import {
 	Constraint,
 	NumberTextProps,
 	Parser,
+	PointAxis,
 	PointNdTextController,
 	SliderProps,
 	Value,
 	ValueController,
 	ViewProps,
 } from '@tweakpane/core';
-import {PointAxis} from '@tweakpane/core/dist/esm/common/point-nd/point-axis.js';
 
 import {Interval, IntervalAssembly} from '../model/interval.js';
 import {RangeSliderTextView} from '../view/range-slider-text.js';

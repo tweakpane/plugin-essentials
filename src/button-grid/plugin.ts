@@ -23,7 +23,6 @@ export interface ButtonGridBladeParams extends BaseBladeParams {
 export const ButtonGridBladePlugin: BladePlugin<ButtonGridBladeParams> = {
 	id: 'buttongrid',
 	type: 'blade',
-	css: '__css__',
 	core: VERSION,
 
 	accept(params) {
