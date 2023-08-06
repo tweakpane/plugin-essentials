@@ -1,13 +1,13 @@
 import {
 	BaseBladeParams,
 	BladePlugin,
+	createPlugin,
 	createValue,
 	LabeledValueBladeController,
 	LabelPropsObject,
 	MicroParser,
 	parseRecord,
 	ValueMap,
-	VERSION,
 } from '@tweakpane/core';
 
 import {RadioGridApi} from './api/radio-grid.js';
@@ -32,10 +32,9 @@ export interface RadioGridBladeParams<T> extends BaseBladeParams {
 export const RadioGridBladePlugin = (function <T>(): BladePlugin<
 	RadioGridBladeParams<T>
 > {
-	return {
+	return createPlugin({
 		id: 'radiogrid',
 		type: 'blade',
-		core: VERSION,
 
 		accept(params) {
 			const result = parseRecord<RadioGridBladeParams<T>>(params, (p) => ({
@@ -84,5 +83,5 @@ export const RadioGridBladePlugin = (function <T>(): BladePlugin<
 			}
 			return new RadioGridApi(args.controller);
 		},
-	};
+	});
 })();

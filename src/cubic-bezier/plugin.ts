@@ -2,6 +2,7 @@ import {
 	BladePlugin,
 	Constraint,
 	createNumberFormatter,
+	createPlugin,
 	createValue,
 	LabeledValueBladeController,
 	LabelPropsObject,
@@ -10,7 +11,6 @@ import {
 	PointNdConstraint,
 	RangeConstraint,
 	ValueMap,
-	VERSION,
 } from '@tweakpane/core';
 import {BaseBladeParams} from 'tweakpane';
 
@@ -41,59 +41,59 @@ function createConstraint(): Constraint<CubicBezier> {
 	});
 }
 
-export const CubicBezierBladePlugin: BladePlugin<CubicBezierBladeParams> = {
-	id: 'cubicbezier',
-	type: 'blade',
-	core: VERSION,
+export const CubicBezierBladePlugin: BladePlugin<CubicBezierBladeParams> =
+	createPlugin({
+		id: 'cubicbezier',
+		type: 'blade',
 
-	accept(params) {
-		const result = parseRecord(params, (p) => ({
-			value: p.required.array(p.required.number),
-			view: p.required.constant('cubicbezier'),
+		accept(params) {
+			const result = parseRecord(params, (p) => ({
+				value: p.required.array(p.required.number),
+				view: p.required.constant('cubicbezier'),
 
-			expanded: p.optional.boolean,
-			label: p.optional.string,
-			picker: p.optional.custom<PickerLayout>((v) => {
-				return v === 'inline' || v === 'popup' ? v : undefined;
-			}),
-		}));
-		return result ? {params: result} : null;
-	},
-	controller(args) {
-		const rv = new CubicBezier(...args.params.value);
-		const v = createValue(rv, {
-			constraint: createConstraint(),
-			equals: CubicBezier.equals,
-		});
-		const vc = new CubicBezierController(args.document, {
-			axis: {
-				textProps: ValueMap.fromObject({
-					keyScale: 0.1,
-					pointerScale: 0.01,
-					formatter: createNumberFormatter(2),
+				expanded: p.optional.boolean,
+				label: p.optional.string,
+				picker: p.optional.custom<PickerLayout>((v) => {
+					return v === 'inline' || v === 'popup' ? v : undefined;
 				}),
-			},
-			expanded: args.params.expanded ?? false,
-			pickerLayout: args.params.picker ?? 'popup',
-			value: v,
-			viewProps: args.viewProps,
-		});
-		return new LabeledValueBladeController(args.document, {
-			blade: args.blade,
-			props: ValueMap.fromObject({
-				label: args.params.label,
-			} as LabelPropsObject),
-			value: v,
-			valueController: vc,
-		});
-	},
-	api(args) {
-		if (!(args.controller instanceof LabeledValueBladeController)) {
-			return null;
-		}
-		if (!(args.controller.valueController instanceof CubicBezierController)) {
-			return null;
-		}
-		return new CubicBezierApi(args.controller);
-	},
-};
+			}));
+			return result ? {params: result} : null;
+		},
+		controller(args) {
+			const rv = new CubicBezier(...args.params.value);
+			const v = createValue(rv, {
+				constraint: createConstraint(),
+				equals: CubicBezier.equals,
+			});
+			const vc = new CubicBezierController(args.document, {
+				axis: {
+					textProps: ValueMap.fromObject({
+						keyScale: 0.1,
+						pointerScale: 0.01,
+						formatter: createNumberFormatter(2),
+					}),
+				},
+				expanded: args.params.expanded ?? false,
+				pickerLayout: args.params.picker ?? 'popup',
+				value: v,
+				viewProps: args.viewProps,
+			});
+			return new LabeledValueBladeController(args.document, {
+				blade: args.blade,
+				props: ValueMap.fromObject({
+					label: args.params.label,
+				} as LabelPropsObject),
+				value: v,
+				valueController: vc,
+			});
+		},
+		api(args) {
+			if (!(args.controller instanceof LabeledValueBladeController)) {
+				return null;
+			}
+			if (!(args.controller.valueController instanceof CubicBezierController)) {
+				return null;
+			}
+			return new CubicBezierApi(args.controller);
+		},
+	});

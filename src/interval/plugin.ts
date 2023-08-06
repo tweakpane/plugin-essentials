@@ -4,6 +4,7 @@ import {
 	Constraint,
 	createNumberTextInputParamsParser,
 	createNumberTextPropsObject,
+	createPlugin,
 	createRangeConstraint,
 	createStepConstraint,
 	DefiniteRangeConstraint,
@@ -16,7 +17,6 @@ import {
 	PointNdTextController,
 	TpError,
 	ValueMap,
-	VERSION,
 } from '@tweakpane/core';
 
 import {IntervalConstraint} from './constraint/interval.js';
@@ -44,10 +44,9 @@ export const IntervalInputPlugin: InputBindingPlugin<
 	Interval,
 	IntervalObject,
 	IntervalInputParams
-> = {
+> = createPlugin({
 	id: 'input-interval',
 	type: 'input',
-	core: VERSION,
 
 	accept: (exValue, params) => {
 		if (!Interval.isObject(exValue)) {
@@ -110,4 +109,4 @@ export const IntervalInputPlugin: InputBindingPlugin<
 			viewProps: args.viewProps,
 		});
 	},
-};
+});

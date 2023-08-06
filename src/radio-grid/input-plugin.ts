@@ -1,12 +1,12 @@
 import {
 	BaseInputParams,
 	boolFromUnknown,
+	createPlugin,
 	InputBindingPlugin,
 	MicroParser,
 	numberFromUnknown,
 	parseRecord,
 	stringFromUnknown,
-	VERSION,
 	writePrimitive,
 } from '@tweakpane/core';
 
@@ -29,10 +29,9 @@ function createRadioGridInputPlugin<T>(config: {
 	isType: (value: unknown) => value is T;
 	binding: InputBindingPlugin<T, T, RadioGridInputParams<T>>['binding'];
 }): InputBindingPlugin<T, T, RadioGridInputParams<T>> {
-	return {
+	return createPlugin({
 		id: 'input-radiogrid',
 		type: 'input',
-		core: VERSION,
 
 		accept(value, params) {
 			if (!config.isType(value)) {
@@ -71,7 +70,7 @@ function createRadioGridInputPlugin<T>(config: {
 				value: args.value,
 			});
 		},
-	};
+	});
 }
 
 export const RadioGruidNumberInputPlugin = createRadioGridInputPlugin<number>({

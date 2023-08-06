@@ -2,6 +2,7 @@ import {
 	BaseBladeParams,
 	BladePlugin,
 	Constants,
+	createPlugin,
 	createValue,
 	initializeBuffer,
 	IntervalTicker,
@@ -10,7 +11,6 @@ import {
 	parseRecord,
 	Ticker,
 	ValueMap,
-	VERSION,
 } from '@tweakpane/core';
 
 import {FpsGraphBladeApi} from './api/fps-graph.js';
@@ -39,44 +39,44 @@ function createTicker(
 		  );
 }
 
-export const FpsGraphBladePlugin: BladePlugin<FpsGraphBladeParams> = {
-	id: 'fpsgraph',
-	type: 'blade',
-	core: VERSION,
+export const FpsGraphBladePlugin: BladePlugin<FpsGraphBladeParams> =
+	createPlugin({
+		id: 'fpsgraph',
+		type: 'blade',
 
-	accept(params) {
-		const result = parseRecord<FpsGraphBladeParams>(params, (p) => ({
-			view: p.required.constant('fpsgraph'),
+		accept(params) {
+			const result = parseRecord<FpsGraphBladeParams>(params, (p) => ({
+				view: p.required.constant('fpsgraph'),
 
-			interval: p.optional.number,
-			label: p.optional.string,
-			rows: p.optional.number,
-			max: p.optional.number,
-			min: p.optional.number,
-		}));
-		return result ? {params: result} : null;
-	},
-	controller(args) {
-		const interval = args.params.interval ?? 500;
-		return new FpsGraphBladeController(args.document, {
-			blade: args.blade,
-			labelProps: ValueMap.fromObject<LabelPropsObject>({
-				label: args.params.label,
-			}),
-			valueController: new FpsGraphController(args.document, {
-				rows: args.params.rows ?? 2,
-				maxValue: args.params.max ?? 90,
-				minValue: args.params.min ?? 0,
-				ticker: createTicker(args.document, interval),
-				value: createValue(initializeBuffer(80)),
-				viewProps: args.viewProps,
-			}),
-		});
-	},
-	api(args) {
-		if (!(args.controller instanceof FpsGraphBladeController)) {
-			return null;
-		}
-		return new FpsGraphBladeApi(args.controller);
-	},
-};
+				interval: p.optional.number,
+				label: p.optional.string,
+				rows: p.optional.number,
+				max: p.optional.number,
+				min: p.optional.number,
+			}));
+			return result ? {params: result} : null;
+		},
+		controller(args) {
+			const interval = args.params.interval ?? 500;
+			return new FpsGraphBladeController(args.document, {
+				blade: args.blade,
+				labelProps: ValueMap.fromObject<LabelPropsObject>({
+					label: args.params.label,
+				}),
+				valueController: new FpsGraphController(args.document, {
+					rows: args.params.rows ?? 2,
+					maxValue: args.params.max ?? 90,
+					minValue: args.params.min ?? 0,
+					ticker: createTicker(args.document, interval),
+					value: createValue(initializeBuffer(80)),
+					viewProps: args.viewProps,
+				}),
+			});
+		},
+		api(args) {
+			if (!(args.controller instanceof FpsGraphBladeController)) {
+				return null;
+			}
+			return new FpsGraphBladeApi(args.controller);
+		},
+	});

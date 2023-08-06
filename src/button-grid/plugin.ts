@@ -1,11 +1,11 @@
 import {
 	BaseBladeParams,
 	BladePlugin,
+	createPlugin,
 	LabelPropsObject,
 	MicroParser,
 	parseRecord,
 	ValueMap,
-	VERSION,
 } from '@tweakpane/core';
 
 import {ButtonGridApi} from './api/button-grid.js';
@@ -20,41 +20,41 @@ export interface ButtonGridBladeParams extends BaseBladeParams {
 	label?: string;
 }
 
-export const ButtonGridBladePlugin: BladePlugin<ButtonGridBladeParams> = {
-	id: 'buttongrid',
-	type: 'blade',
-	core: VERSION,
+export const ButtonGridBladePlugin: BladePlugin<ButtonGridBladeParams> =
+	createPlugin({
+		id: 'buttongrid',
+		type: 'blade',
 
-	accept(params) {
-		const result = parseRecord<ButtonGridBladeParams>(params, (p) => ({
-			cells: p.required.function as MicroParser<
-				(x: number, y: number) => {title: string}
-			>,
-			size: p.required.array(p.required.number) as MicroParser<
-				[number, number]
-			>,
-			view: p.required.constant('buttongrid'),
+		accept(params) {
+			const result = parseRecord<ButtonGridBladeParams>(params, (p) => ({
+				cells: p.required.function as MicroParser<
+					(x: number, y: number) => {title: string}
+				>,
+				size: p.required.array(p.required.number) as MicroParser<
+					[number, number]
+				>,
+				view: p.required.constant('buttongrid'),
 
-			label: p.optional.string,
-		}));
-		return result ? {params: result} : null;
-	},
-	controller(args) {
-		return new ButtonGridBladeController(args.document, {
-			blade: args.blade,
-			labelProps: ValueMap.fromObject<LabelPropsObject>({
-				label: args.params.label,
-			}),
-			valueController: new ButtonGridController(args.document, {
-				cellConfig: args.params.cells,
-				size: args.params.size,
-			}),
-		});
-	},
-	api(args) {
-		if (args.controller instanceof ButtonGridBladeController) {
-			return new ButtonGridApi(args.controller);
-		}
-		return null;
-	},
-};
+				label: p.optional.string,
+			}));
+			return result ? {params: result} : null;
+		},
+		controller(args) {
+			return new ButtonGridBladeController(args.document, {
+				blade: args.blade,
+				labelProps: ValueMap.fromObject<LabelPropsObject>({
+					label: args.params.label,
+				}),
+				valueController: new ButtonGridController(args.document, {
+					cellConfig: args.params.cells,
+					size: args.params.size,
+				}),
+			});
+		},
+		api(args) {
+			if (args.controller instanceof ButtonGridBladeController) {
+				return new ButtonGridApi(args.controller);
+			}
+			return null;
+		},
+	});
