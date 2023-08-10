@@ -1,4 +1,4 @@
-import {RadioController} from '../controller/radio';
+import {RadioController} from '../controller/radio.js';
 
 export class RadioCellApi {
 	private controller_: RadioController;

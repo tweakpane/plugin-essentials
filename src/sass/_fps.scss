@@ -1,9 +1,11 @@
-.#{$prefix}-fpsv {
+@use '../../node_modules/@tweakpane/core/lib/sass/tp';
+
+.#{tp.$prefix}-fpsv {
 	position: relative;
 
 	&_l {
 		bottom: 4px;
-		color: var(--mo-fg);
+		color: tp.cssVar('monitor-fg');
 		line-height: 1;
 		right: 4px;
 		pointer-events: none;

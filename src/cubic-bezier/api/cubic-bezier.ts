@@ -1,7 +1,11 @@
-import {BladeApi, LabeledValueController, TpChangeEvent} from '@tweakpane/core';
+import {
+	BladeApi,
+	LabeledValueBladeController,
+	TpChangeEvent,
+} from '@tweakpane/core';
 
-import {CubicBezierController} from '../controller/cubic-bezier';
-import {CubicBezier} from '../model/cubic-bezier';
+import {CubicBezierController} from '../controller/cubic-bezier.js';
+import {CubicBezier} from '../model/cubic-bezier.js';
 
 export interface CubicBezierApiEvents {
 	change: {
@@ -10,22 +14,22 @@ export interface CubicBezierApiEvents {
 }
 
 export class CubicBezierApi extends BladeApi<
-	LabeledValueController<CubicBezier, CubicBezierController>
+	LabeledValueBladeController<CubicBezier, CubicBezierController>
 > {
-	get label(): string | undefined {
-		return this.controller_.props.get('label');
+	get label(): string | null | undefined {
+		return this.controller.labelController.props.get('label');
 	}
 
-	set label(label: string | undefined) {
-		this.controller_.props.set('label', label);
+	set label(label: string | null | undefined) {
+		this.controller.labelController.props.set('label', label);
 	}
 
 	get value(): CubicBezier {
-		return this.controller_.valueController.value.rawValue;
+		return this.controller.valueController.value.rawValue;
 	}
 
 	set value(value: CubicBezier) {
-		this.controller_.valueController.value.rawValue = value;
+		this.controller.valueController.value.rawValue = value;
 	}
 
 	public on<EventName extends keyof CubicBezierApiEvents>(
@@ -33,8 +37,8 @@ export class CubicBezierApi extends BladeApi<
 		handler: (ev: CubicBezierApiEvents[EventName]['event']) => void,
 	): this {
 		const bh = handler.bind(this);
-		this.controller_.valueController.value.emitter.on(eventName, (ev) => {
-			bh(new TpChangeEvent(this, ev.rawValue, undefined, ev.options.last));
+		this.controller.valueController.value.emitter.on(eventName, (ev) => {
+			bh(new TpChangeEvent(this, ev.rawValue, ev.options.last));
 		});
 		return this;
 	}

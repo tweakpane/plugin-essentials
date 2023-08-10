@@ -1,6 +1,11 @@
-'use strict';
+/* eslint-disable no-console */
+/* eslint-env node */
 
-const Package = require('../package.json');
+import Fs from 'fs';
+
+const Package = JSON.parse(
+	Fs.readFileSync(new URL('../package.json', import.meta.url)),
+);
 
 // `@tweakpane/plugin-foobar` -> `tweakpane-plugin-foobar`
 // `tweakpane-plugin-foobar`  -> `tweakpane-plugin-foobar`

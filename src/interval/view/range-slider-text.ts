@@ -1,7 +1,7 @@
 import {ClassName, PointNdTextController, View} from '@tweakpane/core';
 
-import {Interval} from '../model/interval';
-import {RangeSliderView} from './range-slider';
+import {Interval} from '../model/interval.js';
+import {RangeSliderView} from './range-slider.js';
 
 interface Config {
 	sliderView: RangeSliderView;

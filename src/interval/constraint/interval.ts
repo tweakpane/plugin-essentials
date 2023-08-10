@@ -1,6 +1,6 @@
 import {Constraint} from '@tweakpane/core';
 
-import {Interval} from '../model/interval';
+import {Interval} from '../model/interval.js';
 
 export class IntervalConstraint implements Constraint<Interval> {
 	public readonly edge: Constraint<number> | undefined;

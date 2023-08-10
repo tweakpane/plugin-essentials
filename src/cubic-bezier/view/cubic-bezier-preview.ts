@@ -8,8 +8,8 @@ import {
 	ViewProps,
 } from '@tweakpane/core';
 
-import {CubicBezier} from '../model/cubic-bezier';
-import {waitToBeAddedToDom} from './util';
+import {CubicBezier} from '../model/cubic-bezier.js';
+import {waitToBeAddedToDom} from './util.js';
 
 interface Config {
 	value: Value<CubicBezier>;

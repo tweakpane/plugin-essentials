@@ -1,26 +1,24 @@
 import {
 	Constraint,
-	Formatter,
+	NumberTextProps,
 	Parser,
+	PointAxis,
 	PointNdTextController,
 	SliderProps,
 	Value,
 	ValueController,
-	ValueMap,
 	ViewProps,
 } from '@tweakpane/core';
 
-import {Interval, IntervalAssembly} from '../model/interval';
-import {RangeSliderTextView} from '../view/range-slider-text';
-import {RangeSliderController} from './range-slider';
+import {Interval, IntervalAssembly} from '../model/interval.js';
+import {RangeSliderTextView} from '../view/range-slider-text.js';
+import {RangeSliderController} from './range-slider.js';
 
 interface Config {
-	baseStep: number;
 	constraint: Constraint<number> | undefined;
-	draggingScale: number;
-	formatter: Formatter<number>;
 	parser: Parser<number>;
 	sliderProps: SliderProps;
+	textProps: NumberTextProps;
 	value: Value<Interval>;
 	viewProps: ViewProps;
 }
@@ -41,13 +39,9 @@ export class RangeSliderTextController
 		this.sc_ = new RangeSliderController(doc, config);
 
 		const axis = {
-			baseStep: config.baseStep,
 			constraint: config.constraint,
-			textProps: ValueMap.fromObject({
-				draggingScale: config.draggingScale,
-				formatter: config.formatter,
-			}),
-		};
+			textProps: config.textProps,
+		} as PointAxis;
 		this.tc_ = new PointNdTextController(doc, {
 			assembly: IntervalAssembly,
 			axes: [axis, axis],

@@ -15,6 +15,7 @@ interface Config {
 	size: [number, number];
 	cellConfig: (x: number, y: number) => CellConfig;
 }
+export type ButtonGridControllerConfig = Config;
 
 export class ButtonGridController implements Controller<PlainView> {
 	public readonly size: [number, number];

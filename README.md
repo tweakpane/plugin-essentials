@@ -9,10 +9,11 @@ Essential components for [Tweakpane][tweakpane].
 
 ### Browser
 ```html
-<script src="tweakpane.min.js"></script>
-<script src="tweakpane-plugin-essentials.min.js"></script>
-<script>
-  const pane = new Tweakpane.Pane();
+<script type="module">
+  import {Pane} as Tweakpane from './tweakpane.min.js';
+  import * as TweakpaneEssentialsPlugin from './tweakpane-plugin-essentials.min.js';
+
+  const pane = new Pane();
   pane.registerPlugin(TweakpaneEssentialsPlugin);
 </script>
 ```
@@ -39,7 +40,7 @@ const params = {
   range: {min: 16, max: 48},
 };
 
-pane.addInput(params, 'range', {
+pane.addBinding(params, 'range', {
   min: 0,
   max: 100,
 
@@ -56,7 +57,7 @@ const fpsGraph = pane.addBlade({
   view: 'fpsgraph',
 
   label: 'fpsgraph',
-  lineCount: 2,
+  rows: 2,
 });
 
 function render() {
@@ -79,7 +80,7 @@ const params = {
 };
 
 const scales = [10, 20, 25, 50, 75, 100];
-pane.addInput(params, 'scale', {
+pane.addBinding(params, 'scale', {
   view: 'radiogrid',
   groupName: 'scale',
   size: [3, 2],

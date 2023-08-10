@@ -1,16 +1,16 @@
 import {
 	BaseInputParams,
 	boolFromUnknown,
+	createPlugin,
 	InputBindingPlugin,
+	MicroParser,
 	numberFromUnknown,
-	ParamsParser,
-	ParamsParsers,
-	parseParams,
+	parseRecord,
 	stringFromUnknown,
 	writePrimitive,
 } from '@tweakpane/core';
 
-import {RadioGridController} from './controller/radio-grid';
+import {RadioGridController} from './controller/radio-grid.js';
 
 interface RadioGridInputParams<T> extends BaseInputParams {
 	cells: (
@@ -29,17 +29,17 @@ function createRadioGridInputPlugin<T>(config: {
 	isType: (value: unknown) => value is T;
 	binding: InputBindingPlugin<T, T, RadioGridInputParams<T>>['binding'];
 }): InputBindingPlugin<T, T, RadioGridInputParams<T>> {
-	return {
+	return createPlugin({
 		id: 'input-radiogrid',
 		type: 'input',
+
 		accept(value, params) {
 			if (!config.isType(value)) {
 				return null;
 			}
 
-			const p = ParamsParsers;
-			const result = parseParams<RadioGridInputParams<T>>(params, {
-				cells: p.required.function as ParamsParser<
+			const result = parseRecord<RadioGridInputParams<T>>(params, (p) => ({
+				cells: p.required.function as MicroParser<
 					(
 						x: number,
 						y: number,
@@ -49,11 +49,11 @@ function createRadioGridInputPlugin<T>(config: {
 					}
 				>,
 				groupName: p.required.string,
-				size: p.required.array(p.required.number) as ParamsParser<
+				size: p.required.array(p.required.number) as MicroParser<
 					[number, number]
 				>,
 				view: p.required.constant('radiogrid'),
-			});
+			}));
 			return result
 				? {
 						initialValue: value,
@@ -70,7 +70,7 @@ function createRadioGridInputPlugin<T>(config: {
 				value: args.value,
 			});
 		},
-	};
+	});
 }
 
 export const RadioGruidNumberInputPlugin = createRadioGridInputPlugin<number>({

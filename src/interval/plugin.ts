@@ -2,36 +2,29 @@ import {
 	BaseInputParams,
 	CompositeConstraint,
 	Constraint,
-	createNumberFormatter,
+	createNumberTextInputParamsParser,
+	createNumberTextPropsObject,
+	createPlugin,
 	createRangeConstraint,
 	createStepConstraint,
 	DefiniteRangeConstraint,
 	findConstraint,
-	Formatter,
-	getBaseStep,
-	getSuitableDecimalDigits,
-	getSuitableDraggingScale,
 	InputBindingPlugin,
-	ParamsParser,
-	ParamsParsers,
+	NumberInputParams,
 	parseNumber,
-	parseParams,
+	parseRecord,
+	PointAxis,
 	PointNdTextController,
 	TpError,
 	ValueMap,
 } from '@tweakpane/core';
 
-import {IntervalConstraint} from './constraint/interval';
-import {RangeSliderTextController} from './controller/range-slider-text';
-import {intervalFromUnknown, writeInterval} from './converter/interval';
-import {Interval, IntervalAssembly, IntervalObject} from './model/interval';
+import {IntervalConstraint} from './constraint/interval.js';
+import {RangeSliderTextController} from './controller/range-slider-text.js';
+import {intervalFromUnknown, writeInterval} from './converter/interval.js';
+import {Interval, IntervalAssembly, IntervalObject} from './model/interval.js';
 
-interface IntervalInputParams extends BaseInputParams {
-	format?: Formatter<number>;
-	max?: number;
-	min?: number;
-	step?: number;
-}
+interface IntervalInputParams extends NumberInputParams, BaseInputParams {}
 
 function createConstraint(params: IntervalInputParams): Constraint<Interval> {
 	const constraints = [];
@@ -51,23 +44,19 @@ export const IntervalInputPlugin: InputBindingPlugin<
 	Interval,
 	IntervalObject,
 	IntervalInputParams
-> = {
+> = createPlugin({
 	id: 'input-interval',
 	type: 'input',
-	css: '__css__',
 
 	accept: (exValue, params) => {
 		if (!Interval.isObject(exValue)) {
 			return null;
 		}
 
-		const p = ParamsParsers;
-		const result = parseParams<IntervalInputParams>(params, {
-			format: p.optional.function as ParamsParser<Formatter<number>>,
-			max: p.optional.number,
-			min: p.optional.number,
-			step: p.optional.number,
-		});
+		const result = parseRecord<IntervalInputParams>(params, (p) => ({
+			...createNumberTextInputParamsParser(p),
+			readonly: p.optional.constant(false),
+		}));
 		return result
 			? {
 					initialValue: new Interval(exValue.min, exValue.max),
@@ -89,35 +78,29 @@ export const IntervalInputPlugin: InputBindingPlugin<
 		}
 
 		const midValue = (v.rawValue.min + v.rawValue.max) / 2;
-		const formatter =
-			args.params.format ??
-			createNumberFormatter(getSuitableDecimalDigits(c.edge, midValue));
-
+		const textProps = ValueMap.fromObject(
+			createNumberTextPropsObject(args.params, midValue),
+		);
 		const drc = c.edge && findConstraint(c.edge, DefiniteRangeConstraint);
 		if (drc) {
 			return new RangeSliderTextController(args.document, {
-				baseStep: getBaseStep(c.edge),
 				constraint: c.edge,
-				draggingScale: getSuitableDraggingScale(c.edge, midValue),
-				formatter: formatter,
 				parser: parseNumber,
 				sliderProps: new ValueMap({
-					maxValue: drc.values.value('max'),
-					minValue: drc.values.value('min'),
+					keyScale: textProps.value('keyScale'),
+					max: drc.values.value('max'),
+					min: drc.values.value('min'),
 				}),
+				textProps: textProps,
 				value: v,
 				viewProps: args.viewProps,
 			});
 		}
 
 		const axis = {
-			baseStep: getBaseStep(c.edge),
 			constraint: c.edge,
-			textProps: ValueMap.fromObject({
-				draggingScale: midValue,
-				formatter: formatter,
-			}),
-		};
+			textProps: textProps,
+		} as PointAxis;
 		return new PointNdTextController(args.document, {
 			assembly: IntervalAssembly,
 			axes: [axis, axis],
@@ -126,4 +109,4 @@ export const IntervalInputPlugin: InputBindingPlugin<
 			viewProps: args.viewProps,
 		});
 	},
-};
+});

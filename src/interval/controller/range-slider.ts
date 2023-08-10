@@ -10,8 +10,8 @@ import {
 	ViewProps,
 } from '@tweakpane/core';
 
-import {Interval} from '../model/interval';
-import {RangeSliderView} from '../view/range-slider';
+import {Interval} from '../model/interval.js';
+import {RangeSliderView} from '../view/range-slider.js';
 
 interface Config {
 	sliderProps: SliderProps;
@@ -68,8 +68,8 @@ export class RangeSliderController
 		}
 
 		const p = (data.point.x + this.ofs_()) / data.bounds.width;
-		const min = this.sliderProps.get('minValue');
-		const max = this.sliderProps.get('maxValue');
+		const min = this.sliderProps.get('min');
+		const max = this.sliderProps.get('max');
 		return mapRange(p, 0, 1, min, max);
 	}
 
@@ -80,8 +80,8 @@ export class RangeSliderController
 
 		const p = ev.data.point.x / ev.data.bounds.width;
 		const v = this.value.rawValue;
-		const min = this.sliderProps.get('minValue');
-		const max = this.sliderProps.get('maxValue');
+		const min = this.sliderProps.get('min');
+		const max = this.sliderProps.get('max');
 		const pmin = mapRange(v.min, min, max, 0, 1);
 		const pmax = mapRange(v.max, min, max, 0, 1);
 
@@ -110,8 +110,8 @@ export class RangeSliderController
 			return;
 		}
 
-		const rmin = this.sliderProps.get('minValue');
-		const rmax = this.sliderProps.get('maxValue');
+		const rmin = this.sliderProps.get('min');
+		const rmax = this.sliderProps.get('max');
 		if (this.grabbing_ === 'min') {
 			this.value.setRawValue(new Interval(v, this.value.rawValue.max), opts);
 		} else if (this.grabbing_ === 'max') {

@@ -1,6 +1,6 @@
 import {Controller, ViewProps} from '@tweakpane/core';
 
-import {RadioProps, RadioView} from '../view/radio';
+import {RadioProps, RadioView} from '../view/radio.js';
 
 interface Config {
 	name: string;

@@ -1,5 +1,9 @@
-import {constrainRange, isEmpty, mapRange} from '@tweakpane/core';
-import {PointNdAssembly} from '@tweakpane/core/dist/cjs/input-binding/common/model/point-nd';
+import {
+	constrainRange,
+	isEmpty,
+	mapRange,
+	PointNdAssembly,
+} from '@tweakpane/core';
 
 export type CubicBezierObject = [number, number, number, number];
 

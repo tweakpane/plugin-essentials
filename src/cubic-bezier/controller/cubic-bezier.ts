@@ -2,7 +2,6 @@ import {
 	bindFoldable,
 	bindValue,
 	connectValues,
-	createFoldable,
 	findNextTarget,
 	Foldable,
 	forceCast,
@@ -20,13 +19,12 @@ import {
 import {
 	cubicBezierFromString,
 	cubicBezierToString,
-} from '../converter/cubic-bezier';
-import {CubicBezier} from '../model/cubic-bezier';
-import {CubicBezierView} from '../view/cubic-bezier';
-import {CubicBezierPickerController} from './cubic-bezier-picker';
+} from '../converter/cubic-bezier.js';
+import {CubicBezier} from '../model/cubic-bezier.js';
+import {CubicBezierView} from '../view/cubic-bezier.js';
+import {CubicBezierPickerController} from './cubic-bezier-picker.js';
 
 interface Axis {
-	baseStep: number;
 	textProps: NumberTextProps;
 }
 
@@ -57,7 +55,7 @@ export class CubicBezierController
 
 		this.value = config.value;
 		this.viewProps = config.viewProps;
-		this.foldable_ = createFoldable(config.expanded);
+		this.foldable_ = Foldable.create(config.expanded);
 
 		this.view = new CubicBezierView(doc, {
 			foldable: this.foldable_,
@@ -106,8 +104,8 @@ export class CubicBezierController
 			connectValues({
 				primary: this.foldable_.value('expanded'),
 				secondary: this.popC_.shows,
-				forward: (p) => p.rawValue,
-				backward: (_, s) => s.rawValue,
+				forward: (p) => p,
+				backward: (_, s) => s,
 			});
 		} else if (this.view.pickerElement) {
 			this.view.pickerElement.appendChild(this.pickerC_.view.element);

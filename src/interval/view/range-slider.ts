@@ -8,7 +8,7 @@ import {
 	ViewProps,
 } from '@tweakpane/core';
 
-import {Interval} from '../model/interval';
+import {Interval} from '../model/interval.js';
 
 interface Config {
 	sliderProps: SliderProps;
@@ -62,8 +62,8 @@ export class RangeSliderView implements View {
 	}
 
 	private valueToX_(value: number): number {
-		const min = this.sliderProps_.get('minValue');
-		const max = this.sliderProps_.get('maxValue');
+		const min = this.sliderProps_.get('min');
+		const max = this.sliderProps_.get('max');
 		return constrainRange(mapRange(value, min, max, 0, 1), 0, 1) * 100;
 	}
 

@@ -1,20 +1,22 @@
-.#{$prefix}-btngridv {
-	border-radius: var(--elm-br);
+@use '../../node_modules/@tweakpane/core/lib/sass/tp';
+
+.#{tp.$prefix}-btngridv {
+	border-radius: tp.cssVar('blade-border-radius');
 	display: grid;
 	overflow: hidden;
 	gap: 2px;
 
-	&.#{$prefix}-v-disabled {
+	&.#{tp.$prefix}-v-disabled {
 		opacity: 0.5;
 	}
 
-	& .#{$prefix}-btnv_b:disabled {
+	& .#{tp.$prefix}-btnv_b:disabled {
 		opacity: 1;
 	}
-	& .#{$prefix}-btnv_b:disabled .#{$prefix}-btnv_t {
+	& .#{tp.$prefix}-btnv_b:disabled .#{tp.$prefix}-btnv_t {
 		opacity: 0.5;
 	}
-	& .#{$prefix}-btnv_b {
+	& .#{tp.$prefix}-btnv_b {
 		border-radius: 0;
 	}
 }

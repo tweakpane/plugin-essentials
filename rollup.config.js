@@ -1,3 +1,5 @@
+/* eslint-env node */
+
 import Alias from '@rollup/plugin-alias';
 import {nodeResolve} from '@rollup/plugin-node-resolve';
 import Replace from '@rollup/plugin-replace';
@@ -24,12 +26,11 @@ async function compileCss() {
 
 function getPlugins(css, shouldMinify) {
 	const plugins = [
-		// Use ES6 source files to avoid CommonJS transpiling
 		Alias({
 			entries: [
 				{
 					find: '@tweakpane/core',
-					replacement: './node_modules/@tweakpane/core/dist/es6/index.js',
+					replacement: './node_modules/@tweakpane/core/dist/index.js',
 				},
 			],
 		}),
@@ -63,19 +64,6 @@ function getDistName(packageName) {
 		.join('-');
 }
 
-function getUmdName(packageName) {
-	// `@tweakpane/plugin-foobar` -> `TweakpaneFoobarPlugin`
-	// `tweakpane-plugin-foobar`  -> `TweakpaneFoobarPlugin`
-	return (
-		packageName
-			.split(/[@/-]/)
-			.map((comp) =>
-				comp !== 'plugin' ? comp.charAt(0).toUpperCase() + comp.slice(1) : '',
-			)
-			.join('') + 'Plugin'
-	);
-}
-
 export default async () => {
 	const production = process.env.BUILD === 'production';
 	const postfix = production ? '.min' : '';
@@ -87,11 +75,10 @@ export default async () => {
 		external: ['tweakpane'],
 		output: {
 			file: `dist/${distName}${postfix}.js`,
-			format: 'umd',
+			format: 'esm',
 			globals: {
 				tweakpane: 'Tweakpane',
 			},
-			name: getUmdName(Package.name),
 		},
 		plugins: getPlugins(css, production),
 

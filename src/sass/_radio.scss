@@ -1,4 +1,6 @@
-.#{$prefix}-radv {
+@use '../../node_modules/@tweakpane/core/lib/sass/tp';
+
+.#{tp.$prefix}-radv {
 	&_l {
 		display: block;
 		position: relative;
@@ -10,18 +12,18 @@
 		top: 0;
 	}
 	&_b {
-		@extend %button;
+		@extend %tp-button;
 
 		opacity: 0.5;
 	}
 	&_i:hover + &_b {
-		background-color: var(--btn-bg-h);
+		background-color: tp.cssVar('button-bg-hover');
 	}
 	&_i:focus + &_b {
-		background-color: var(--btn-bg-f);
+		background-color: tp.cssVar('button-bg-focus');
 	}
 	&_i:active + &_b {
-		background-color: var(--btn-bg-a);
+		background-color: tp.cssVar('button-bg-active');
 	}
 	&_i:checked + &_b {
 		opacity: 1;
