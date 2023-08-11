@@ -134,4 +134,13 @@ pane.addBlade({
 ```
 
 
+## Version compatibility
+
+| Tweakpane | Essentials |
+| --------- | ---------- |
+| 4.x       | 0.2.x      |
+| 3.x       | 0.1.x      |
+
+
+
 [tweakpane]: https://github.com/cocopon/tweakpane/
