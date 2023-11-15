@@ -89,9 +89,7 @@ export class CubicBezierPreviewView implements View {
 	}
 
 	public refresh(): void {
-		const bounds = this.svgElem_.getBoundingClientRect();
-		const w = bounds.width;
-		const h = bounds.height;
+		const {clientWidth: w, clientHeight: h} = this.svgElem_;
 		const ds: string[] = [];
 		const bezier = this.value_.rawValue;
 		for (let i = 0; i < TICK_COUNT; i++) {
