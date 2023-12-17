@@ -5,16 +5,16 @@ import {
 	createPushedBuffer,
 	GraphLogController,
 	Ticker,
-	ValueMap,
 	ViewProps,
 } from '@tweakpane/core';
+// TODO: Export GraphLogProps in @tweakpane/core
+import {GraphLogProps} from '@tweakpane/core/dist/monitor-binding/number/view/graph-log.js';
 
 import {Fpswatch} from '../model/stopwatch.js';
 import {FpsView} from '../view/fps.js';
 
 interface Config {
-	maxValue: number;
-	minValue: number;
+	props: GraphLogProps;
 	rows: number;
 	ticker: Ticker;
 	value: BufferedValue<number>;
@@ -22,6 +22,7 @@ interface Config {
 }
 
 export class FpsGraphController implements Controller<FpsView> {
+	public readonly props: GraphLogProps;
 	public readonly view: FpsView;
 	public readonly viewProps: ViewProps;
 	private readonly value_: BufferedValue<number>;
@@ -35,6 +36,7 @@ export class FpsGraphController implements Controller<FpsView> {
 		this.ticker_ = config.ticker;
 		this.ticker_.emitter.on('tick', this.onTick_);
 
+		this.props = config.props;
 		this.value_ = config.value;
 		this.viewProps = config.viewProps;
 
@@ -44,10 +46,7 @@ export class FpsGraphController implements Controller<FpsView> {
 
 		this.graphC_ = new GraphLogController(doc, {
 			formatter: createNumberFormatter(0),
-			props: ValueMap.fromObject({
-				max: config.maxValue,
-				min: config.minValue,
-			}),
+			props: this.props,
 			rows: config.rows,
 			value: this.value_,
 			viewProps: this.viewProps,
