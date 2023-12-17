@@ -59,6 +59,10 @@ export class FpsGraphController implements Controller<FpsView> {
 		});
 	}
 
+	get fps(): number | null {
+		return this.stopwatch_.fps;
+	}
+
 	public begin(): void {
 		this.stopwatch_.begin(new Date());
 	}
@@ -68,7 +72,7 @@ export class FpsGraphController implements Controller<FpsView> {
 	}
 
 	private onTick_(): void {
-		const fps = this.stopwatch_.fps;
+		const fps = this.fps;
 		if (fps !== null) {
 			const buffer = this.value_.rawValue;
 			this.value_.rawValue = createPushedBuffer(buffer, fps);

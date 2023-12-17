@@ -3,6 +3,10 @@ import {BladeApi} from '@tweakpane/core';
 import {FpsGraphBladeController} from '../controller/fps-graph-blade.js';
 
 export class FpsGraphBladeApi extends BladeApi<FpsGraphBladeController> {
+	get fps(): number | null {
+		return this.controller.valueController.fps;
+	}
+
 	get max(): number {
 		return this.controller.valueController.props.get('max');
 	}
