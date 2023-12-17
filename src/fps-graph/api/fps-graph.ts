@@ -1,6 +1,10 @@
-import {BladeApi} from '@tweakpane/core';
+import {BladeApi, TpEvent} from '@tweakpane/core';
 
 import {FpsGraphBladeController} from '../controller/fps-graph-blade.js';
+
+export interface FpsGraphBladeApiEvents {
+	tick: TpEvent<FpsGraphBladeApi>;
+}
 
 export class FpsGraphBladeApi extends BladeApi<FpsGraphBladeController> {
 	get fps(): number | null {
@@ -29,5 +33,17 @@ export class FpsGraphBladeApi extends BladeApi<FpsGraphBladeController> {
 
 	public end(): void {
 		this.controller.valueController.end();
+	}
+
+	public on<EventName extends keyof FpsGraphBladeApiEvents>(
+		eventName: EventName,
+		handler: (ev: FpsGraphBladeApiEvents[EventName]) => void,
+	): this {
+		const bh = handler.bind(this);
+		const emitter = this.controller.valueController.ticker.emitter;
+		emitter.on(eventName, () => {
+			bh(new TpEvent(this));
+		});
+		return this;
 	}
 }

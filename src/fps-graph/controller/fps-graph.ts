@@ -23,18 +23,18 @@ interface Config {
 
 export class FpsGraphController implements Controller<FpsView> {
 	public readonly props: GraphLogProps;
+	public readonly ticker: Ticker;
 	public readonly view: FpsView;
 	public readonly viewProps: ViewProps;
 	private readonly value_: BufferedValue<number>;
 	private readonly graphC_: GraphLogController;
 	private readonly stopwatch_ = new Fpswatch();
-	private ticker_: Ticker;
 
 	constructor(doc: Document, config: Config) {
 		this.onTick_ = this.onTick_.bind(this);
 
-		this.ticker_ = config.ticker;
-		this.ticker_.emitter.on('tick', this.onTick_);
+		this.ticker = config.ticker;
+		this.ticker.emitter.on('tick', this.onTick_);
 
 		this.props = config.props;
 		this.value_ = config.value;
@@ -55,7 +55,7 @@ export class FpsGraphController implements Controller<FpsView> {
 
 		this.viewProps.handleDispose(() => {
 			this.graphC_.viewProps.set('disposed', true);
-			this.ticker_.dispose();
+			this.ticker.dispose();
 		});
 	}
 
