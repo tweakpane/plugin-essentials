@@ -105,9 +105,7 @@ export class CubicBezierGraphView implements View {
 	}
 
 	public valueToPosition(x: number, y: number): {x: number; y: number} {
-		const bounds = this.element.getBoundingClientRect();
-		const w = bounds.width;
-		const h = bounds.height;
+		const {clientWidth: w, clientHeight: h} = this.element;
 		const vm = this.getVertMargin_(h);
 		return {
 			x: mapRange(x, 0, 1, 0, w),
