@@ -64,9 +64,11 @@ export const FpsGraphBladePlugin: BladePlugin<FpsGraphBladeParams> =
 					label: args.params.label,
 				}),
 				valueController: new FpsGraphController(args.document, {
+					props: ValueMap.fromObject({
+						max: args.params.max ?? 90,
+						min: args.params.min ?? 0,
+					}),
 					rows: args.params.rows ?? 2,
-					maxValue: args.params.max ?? 90,
-					minValue: args.params.min ?? 0,
 					ticker: createTicker(args.document, interval),
 					value: createValue(initializeBuffer(80)),
 					viewProps: args.viewProps,
