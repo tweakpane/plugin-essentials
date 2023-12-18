@@ -29,6 +29,7 @@ export class CubicBezierPreviewView implements View {
 	private readonly value_: Value<CubicBezier>;
 	private stopped_ = true;
 	private startTime_ = -1;
+	private requestId_ = -1;
 
 	constructor(doc: Document, config: Config) {
 		this.onDispose_ = this.onDispose_.bind(this);
@@ -71,10 +72,11 @@ export class CubicBezierPreviewView implements View {
 
 		this.startTime_ = new Date().getTime() + PREVIEW_DELAY;
 		this.stopped_ = false;
-		requestAnimationFrame(this.onTimer_);
+		this.requestId_ = requestAnimationFrame(this.onTimer_);
 	}
 
 	public stop(): void {
+		cancelAnimationFrame(this.requestId_);
 		this.stopped_ = true;
 		this.markerElem_.classList.remove(className('m', 'a'));
 	}
@@ -114,7 +116,7 @@ export class CubicBezierPreviewView implements View {
 		}
 
 		if (!this.stopped_) {
-			requestAnimationFrame(this.onTimer_);
+			this.requestId_ = requestAnimationFrame(this.onTimer_);
 		}
 	}
 
