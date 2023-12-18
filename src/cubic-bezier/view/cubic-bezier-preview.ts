@@ -69,7 +69,7 @@ export class CubicBezierPreviewView implements View {
 		this.updateMarker_(0);
 		this.markerElem_.classList.add(className('m', 'a'));
 
-		this.startTime_ = new Date().getTime() + PREVIEW_DELAY;
+		this.startTime_ = Date.now() + PREVIEW_DELAY;
 		this.stopped_ = false;
 		requestAnimationFrame(this.onTimer_);
 	}
@@ -105,7 +105,7 @@ export class CubicBezierPreviewView implements View {
 			return;
 		}
 
-		const dt = new Date().getTime() - this.startTime_;
+		const dt = Date.now() - this.startTime_;
 		const p = dt / PREVIEW_DURATION;
 		this.updateMarker_(p);
 

@@ -64,11 +64,11 @@ export class FpsGraphController implements Controller<FpsView> {
 	}
 
 	public begin(): void {
-		this.stopwatch_.begin(new Date());
+		this.stopwatch_.begin(Date.now());
 	}
 
 	public end(): void {
-		this.stopwatch_.end(new Date());
+		this.stopwatch_.end(Date.now());
 	}
 
 	private onTick_(): void {
